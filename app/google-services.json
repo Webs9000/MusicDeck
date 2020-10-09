@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1020596969956",
+    "firebase_url": "https://music-deck.firebaseio.com",
+    "project_id": "music-deck",
+    "storage_bucket": "music-deck.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020596969956:android:a5835b14e79d975891e7f1",
+        "android_client_info": {
+          "package_name": "com.websmobileapps.musicdeck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1020596969956-64ocg9c34la1k149c90nlqjugeamu7ht.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0Yh44r-61TH3wWZglJN9hTarv5wLHGNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1020596969956-64ocg9c34la1k149c90nlqjugeamu7ht.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

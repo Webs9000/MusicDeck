@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.SignUpFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/welcome_to_music_deck"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:textSize="25sp"
+        android:layout_marginTop="50dp"
+        android:id="@+id/signUpWelcome"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email"
+        android:textSize="15sp"
+        android:id="@+id/signupEmailTV"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/signUpWelcome"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signupEmailET"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/signupEmailTV"
+        android:hint="@string/enter_your_email_here"
+        android:textSize="15sp"
+        android:inputType="textEmailAddress"
+        android:maxLength="30"
+        android:autofillHints="email"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        android:textSize="15sp"
+        android:id="@+id/signupPassTV"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@id/signupEmailET"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signupPassET"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/signupPassTV"
+        android:hint="@string/enter_your_password_here"
+        android:textSize="15sp"
+        android:inputType="textPassword"
+        android:maxLength="30"
+        android:autofillHints="password"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:textSize="13sp"
+        android:padding="10dp"
+        android:layout_below="@id/signupPassET"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="5dp"
+        android:id="@+id/signUpButton"
+        />
+
+</RelativeLayout>
