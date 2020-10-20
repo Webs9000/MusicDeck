@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#B5E1F7"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:id="@+id/b5e1f7"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="#B1E5F7"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/hamburger_menu_icon" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="125dp"
+        android:duplicateParentState="false"
+        android:text="UserName"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="View Profile" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Search Lists" />
+
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Sign Out" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/logo" />
+
+</LinearLayout>
