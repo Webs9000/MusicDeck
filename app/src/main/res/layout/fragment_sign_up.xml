@@ -19,12 +19,36 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/username"
+        android:textSize="15sp"
+        android:id="@+id/signupUsernameTV"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_below="@id/signUpWelcome"
+        />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/signupUsernameET"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_below="@id/signupUsernameTV"
+        android:hint="@string/pick_a_username"
+        android:textSize="15sp"
+        android:inputType="textEmailAddress"
+        android:maxLength="30"
+        android:autofillHints="email"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/email"
         android:textSize="15sp"
         android:id="@+id/signupEmailTV"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
-        android:layout_below="@id/signUpWelcome"
+        android:layout_below="@id/signupUsernameET"
         />
 
     <EditText
@@ -77,5 +101,16 @@
         android:layout_marginTop="5dp"
         android:id="@+id/signUpButton"
         />
+    
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="50dp"
+        android:id="@+id/signUpProgBar"
+        android:visibility="invisible"
+        />
+
 
 </RelativeLayout>

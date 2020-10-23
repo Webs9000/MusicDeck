@@ -21,4 +21,12 @@
     <string name="sign_up">Sign Up!</string>
     <string name="sign_up_menu">Sign Up</string>
     <string name="login_menu">Login</string>
+    <string name="create_new_list">Create New List</string>
+    <string name="app_logo">app logo</string>
+    <string name="create">Create!</string>
+    <string name="description">Description:</string>
+    <string name="enter_the_title_here">Enter the title here</string>
+    <string name="title">Title:</string>
+    <string name="pick_a_username">Pick a username!</string>
+    <string name="username">Username:</string>
 </resources>
