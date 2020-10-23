@@ -80,6 +80,7 @@ public class SignUpFragment extends Fragment {
                                 String uid = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
                                 DatabaseUser newUser = new DatabaseUser(username);
                                 mReference.child(uid).setValue(newUser);
+                                Toast.makeText(getContext(), "User added to DB!", Toast.LENGTH_SHORT).show();
 
                                 Toast.makeText(getContext(), "Launch home view!", Toast.LENGTH_SHORT).show();
                             }

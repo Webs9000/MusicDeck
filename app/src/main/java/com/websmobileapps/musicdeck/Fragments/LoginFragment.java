@@ -18,8 +18,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.websmobileapps.musicdeck.R;
+
+import java.util.Objects;
 
 /**
  * This fragment is for logging in existing users.  Upon success, they are sent to the home view.
@@ -31,8 +35,11 @@ public class LoginFragment extends Fragment {
     private View mLoginFragment;
     private FirebaseAuth mFirebaseAuth;
 
-    private EditText mEmailET, mPassET;
-    private Button mLoginButton;
+    private FirebaseDatabase mRootNode;
+    private DatabaseReference mReference;
+
+    private EditText mEmailET, mPassET, mChangeUNET;
+    private Button mLoginButton, mChangeUNButton, mDelAccButton;
     private ProgressBar mLoginProgBar;
 
     public LoginFragment() {
@@ -56,9 +63,12 @@ public class LoginFragment extends Fragment {
 
             mEmailET = mLoginFragment.findViewById(R.id.loginEmailET);
             mPassET = mLoginFragment.findViewById(R.id.loginPassET);
+            mChangeUNET = mLoginFragment.findViewById(R.id.changeUsernameET);
             mLoginProgBar = mLoginFragment.findViewById(R.id.loginProgBar);
 
             mFirebaseAuth = FirebaseAuth.getInstance();
+            mRootNode = FirebaseDatabase.getInstance();
+            mReference = mRootNode.getReference();
 
             mLoginButton = mLoginFragment.findViewById(R.id.loginButton);
             mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +77,48 @@ public class LoginFragment extends Fragment {
                     loginUser();
                 }
             });
+
+            mChangeUNButton = mLoginFragment.findViewById(R.id.changeUNButton);
+            mChangeUNButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    changeUsername();
+                }
+            });
+
+            mDelAccButton = mLoginFragment.findViewById(R.id.accDelButton);
+            mDelAccButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    deleteAccount();
+                }
+            });
+        }
+        catch (Exception e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void changeUsername() {
+        Log.d(TAG, "changeUsername() called");
+        try {
+            String newUN = mChangeUNET.getText().toString();
+            String uid = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
+            mReference.child("users").child(uid).child("username").setValue(newUN);
+        }
+        catch (Exception e) {
+            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void deleteAccount() {
+        Log.d(TAG, "deleteAccount() called");
+        try {
+            FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+            String uid = Objects.requireNonNull(currentUser).getUid();
+            mReference.child("users").child(uid).removeValue();
+            currentUser.delete();
+            mFirebaseAuth.signOut();
         }
         catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -95,6 +147,15 @@ public class LoginFragment extends Fragment {
                                     Toast.makeText(getContext(), "Launch home view!", Toast.LENGTH_SHORT).show();
                                     mLoginProgBar.setVisibility(View.INVISIBLE);
                                     mLoginButton.setEnabled(true);
+
+                                    mChangeUNET.setVisibility(View.VISIBLE);
+                                    mChangeUNET.setEnabled(true);
+
+                                    mChangeUNButton.setVisibility(View.VISIBLE);
+                                    mChangeUNButton.setEnabled(true);
+
+                                    mDelAccButton.setVisibility(View.VISIBLE);
+                                    mDelAccButton.setEnabled(true);
 
                                 }
                             })

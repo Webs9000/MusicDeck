@@ -51,7 +51,7 @@ public class CreateListFragment extends Fragment {
                 public void onClick(View view) {
                     // Get database refs
                     mRootNode = FirebaseDatabase.getInstance();
-                    mReference = mRootNode.getReference("decks");
+                    mReference = mRootNode.getReference().child("decks");
 
                     // Create a deck.  NOT RIGHT YET.
                     String uid = mReference.push().getKey();
