@@ -21,7 +21,7 @@ public class QrCodeScannerFragment extends Fragment implements ZXingScannerView.
     @Override
     public void onCreate(Bundle state) {
         super.onCreate(state);
-        mScannerView = new ZXingScannerView(getActivity());
+        mScannerView = new ZXingScannerView(getContext());
     }
 
     @Override
