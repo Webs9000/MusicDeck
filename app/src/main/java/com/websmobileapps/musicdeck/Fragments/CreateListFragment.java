@@ -3,6 +3,7 @@ package com.websmobileapps.musicdeck.Fragments;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.websmobileapps.musicdeck.Model.Deck;
 import com.websmobileapps.musicdeck.R;
+import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
+
+import java.util.Objects;
 
 /**
  * Fragment to create new lists
@@ -31,6 +35,9 @@ public class CreateListFragment extends Fragment {
     private FirebaseDatabase mRootNode;
     private DatabaseReference mReference;
 
+    private AuthViewModel mAuthViewModel;
+    private FirebaseUser mCurrentUser;
+
     public CreateListFragment() {
         // Required empty public constructor
     }
@@ -38,6 +45,8 @@ public class CreateListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
     }
 
     private void attachToXML() {
@@ -45,26 +54,26 @@ public class CreateListFragment extends Fragment {
             mListTitle = mCreateListFragment.findViewById(R.id.titleET);
             mListDesc = mCreateListFragment.findViewById(R.id.descET);
 
+            // Get database refs
+            mRootNode = FirebaseDatabase.getInstance();
+            mReference = mRootNode.getReference().child("decks");
+
+            mCurrentUser = mAuthViewModel.getUserMutableLiveData().getValue();
+
             mCreateButton = mCreateListFragment.findViewById(R.id.createButton);
             mCreateButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // Get database refs
-                    mRootNode = FirebaseDatabase.getInstance();
-                    mReference = mRootNode.getReference().child("decks");
 
                     // Create a deck.  NOT RIGHT YET.
                     String uid = mReference.push().getKey();
                     String title = mListTitle.getText().toString();
                     String desc = mListDesc.getText().toString();
-                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                    Deck newDeck = new Deck(title, desc, currentUser.getUid());
-                    mReference.child("uid").setValue(newDeck);
+                    Deck newDeck = new Deck(title, desc, mCurrentUser.getUid());
+                    mReference.child(Objects.requireNonNull(uid)).setValue(newDeck);
 
                     // Update the current user's database entry with the new deck
                     mReference = mRootNode.getReference("users");
-
-
                 }
             });
         }

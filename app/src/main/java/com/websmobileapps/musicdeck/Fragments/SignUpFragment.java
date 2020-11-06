@@ -3,7 +3,10 @@ package com.websmobileapps.musicdeck.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,14 +21,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.SignInMethodQueryResult;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.websmobileapps.musicdeck.Model.DatabaseModel;
 import com.websmobileapps.musicdeck.Model.DatabaseUser;
 import com.websmobileapps.musicdeck.Model.Deck;
 import com.websmobileapps.musicdeck.R;
+import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
+import com.websmobileapps.musicdeck.ViewModels.DatabaseViewModel;
 
 import java.util.Objects;
 
@@ -42,9 +49,8 @@ public class SignUpFragment extends Fragment {
     private Button mSignUpButton;
     private ProgressBar mProgressBar;
 
-    private FirebaseAuth mFirebaseAuth;
-    private FirebaseDatabase mRootNode;
-    private DatabaseReference mReference;
+    private AuthViewModel mAuthViewModel;
+    private DatabaseViewModel mDatabaseViewModel;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -58,83 +64,31 @@ public class SignUpFragment extends Fragment {
             String userEmail = mUserEmailET.getText().toString();
             String userPassword = mUserPasswordET.getText().toString();
 
-            // Add to firebase auth
+            // Check form has been filled out
             if (username.isEmpty() ||  userEmail.isEmpty() || userPassword.isEmpty()) {
                 Toast.makeText(getContext(), "Please fill out the sign up form!", Toast.LENGTH_SHORT).show();
             } else {
                 mProgressBar.setVisibility(View.VISIBLE);
                 mSignUpButton.setEnabled(false);
 
-                mFirebaseAuth.createUserWithEmailAndPassword(userEmail, userPassword)
-                        .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                            @Override
-                            public void onSuccess(AuthResult authResult) {
-                                Toast.makeText(getContext(), "User Created!", Toast.LENGTH_SHORT).show();
-                                mProgressBar.setVisibility(View.INVISIBLE);
-                                mSignUpButton.setEnabled(true);
-                                mUsernameET.setText("");
-                                mUserEmailET.setText("");
-                                mUserPasswordET.setText("");
+                // Attempt to add user to both Firebase Auth and DB
+                FirebaseUser user = mAuthViewModel.getUserMutableLiveData().getValue();
+                boolean successful = mAuthViewModel.register(userEmail, userPassword).isSuccessful()
+                        && mDatabaseViewModel.addUser(user, username).isSuccessful();
 
-                                // Add to Firebase database
-                                String uid = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
-                                DatabaseUser newUser = new DatabaseUser(username);
-                                mReference.child(uid).setValue(newUser);
-                                Toast.makeText(getContext(), "User added to DB!", Toast.LENGTH_SHORT).show();
+                if (successful) {
+                    Toast.makeText(getContext(), "User Created!", Toast.LENGTH_SHORT).show();
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mSignUpButton.setEnabled(true);
+                    mUsernameET.setText("");
+                    mUserEmailET.setText("");
+                    mUserPasswordET.setText("");
 
-                                Toast.makeText(getContext(), "Launch home view!", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                mProgressBar.setVisibility(View.INVISIBLE);
-                                mSignUpButton.setEnabled(true);
-                            }
-                        });
-
-            }
-        }
-        catch (Exception e) {
-            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    // Checks is the user entered email is already in use.
-    private void checkUserExists() {
-        Log.d(TAG, "checkUserExists() called");
-        try {
-            String email = mUserEmailET.getText().toString();
-            if (mFirebaseAuth != null && !email.isEmpty()) {
-                mProgressBar.setVisibility(View.VISIBLE);
-                mSignUpButton.setEnabled(false);
-
-                mFirebaseAuth.fetchSignInMethodsForEmail(email)
-                        .addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<SignInMethodQueryResult> task) {
-                                boolean noExist = task.getResult().getSignInMethods().isEmpty();
-
-                                if (noExist) {
-                                    createUser();
-                                } else {
-                                    Toast.makeText(getContext(), "Email already in use.", Toast.LENGTH_SHORT).show();
-                                    mProgressBar.setVisibility(View.INVISIBLE);
-                                    mSignUpButton.setEnabled(true);
-                                }
-
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                mProgressBar.setVisibility(View.INVISIBLE);
-                                mSignUpButton.setEnabled(true);
-                                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                    Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_createListFragment);
+                } else {
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mSignUpButton.setEnabled(true);
+                }
             }
         }
         catch (Exception e) {
@@ -153,21 +107,33 @@ public class SignUpFragment extends Fragment {
             mUserPasswordET = mSignUpFragment.findViewById(R.id.signupPassET);
             mProgressBar = mSignUpFragment.findViewById(R.id.signUpProgBar);
 
-            mFirebaseAuth = FirebaseAuth.getInstance();
-            mRootNode = FirebaseDatabase.getInstance();
-            mReference = mRootNode.getReference().child("users");
-
             mSignUpButton = mSignUpFragment.findViewById(R.id.signUpButton);
             mSignUpButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    checkUserExists();
+                    String username = mUsernameET.getText().toString();
+                    String userEmail = mUserEmailET.getText().toString();
+                    String userPassword = mUserPasswordET.getText().toString();
+
+                    if (username.isEmpty() ||  userEmail.isEmpty() || userPassword.isEmpty()) {
+                        Toast.makeText(getContext(), "Please fill out the sign up form!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        createUser();
+                    }
                 }
             });
         }
         catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        mDatabaseViewModel = new ViewModelProvider(requireActivity()).get(DatabaseViewModel.class);
     }
 
     @Override

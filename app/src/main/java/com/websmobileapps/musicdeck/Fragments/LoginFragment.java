@@ -3,7 +3,11 @@ package com.websmobileapps.musicdeck.Fragments;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.websmobileapps.musicdeck.R;
+import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 
 import java.util.Objects;
 
@@ -33,7 +38,8 @@ public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginFragment";
     private View mLoginFragment;
-    private FirebaseAuth mFirebaseAuth;
+
+    private AuthViewModel mAuthViewModel;
 
     private FirebaseDatabase mRootNode;
     private DatabaseReference mReference;
@@ -44,6 +50,13 @@ public class LoginFragment extends Fragment {
 
     public LoginFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
     }
 
     @Override
@@ -66,7 +79,6 @@ public class LoginFragment extends Fragment {
             mChangeUNET = mLoginFragment.findViewById(R.id.changeUsernameET);
             mLoginProgBar = mLoginFragment.findViewById(R.id.loginProgBar);
 
-            mFirebaseAuth = FirebaseAuth.getInstance();
             mRootNode = FirebaseDatabase.getInstance();
             mReference = mRootNode.getReference();
 
@@ -103,7 +115,7 @@ public class LoginFragment extends Fragment {
         Log.d(TAG, "changeUsername() called");
         try {
             String newUN = mChangeUNET.getText().toString();
-            String uid = Objects.requireNonNull(mFirebaseAuth.getCurrentUser()).getUid();
+            String uid = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
             mReference.child("users").child(uid).child("username").setValue(newUN);
         }
         catch (Exception e) {
@@ -114,11 +126,11 @@ public class LoginFragment extends Fragment {
     public void deleteAccount() {
         Log.d(TAG, "deleteAccount() called");
         try {
-            FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
+            FirebaseUser currentUser = mAuthViewModel.getUserMutableLiveData().getValue();
             String uid = Objects.requireNonNull(currentUser).getUid();
             mReference.child("users").child(uid).removeValue();
             currentUser.delete();
-            mFirebaseAuth.signOut();
+            mAuthViewModel.logout();
         }
         catch (Exception e) {
             Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -135,38 +147,26 @@ public class LoginFragment extends Fragment {
             if (email.isEmpty() || pass.isEmpty()) {
                 Toast.makeText(getContext(), "Please fill out the log in form!", Toast.LENGTH_SHORT).show();
             } else {
-                if (mFirebaseAuth != null) {
-                    mLoginProgBar.setVisibility(View.VISIBLE);
-                    mLoginButton.setEnabled(false);
+                mLoginProgBar.setVisibility(View.VISIBLE);
+                mLoginButton.setEnabled(false);
 
-                    mFirebaseAuth.signInWithEmailAndPassword(email, pass)
-                            .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
+                if (mAuthViewModel.login(email, pass).isSuccessful()) {
+                    mLoginProgBar.setVisibility(View.INVISIBLE);
+                    mLoginButton.setEnabled(true);
 
-                                    Toast.makeText(getContext(), "Launch home view!", Toast.LENGTH_SHORT).show();
-                                    mLoginProgBar.setVisibility(View.INVISIBLE);
-                                    mLoginButton.setEnabled(true);
+                    mChangeUNET.setVisibility(View.VISIBLE);
+                    mChangeUNET.setEnabled(true);
 
-                                    mChangeUNET.setVisibility(View.VISIBLE);
-                                    mChangeUNET.setEnabled(true);
+                    mChangeUNButton.setVisibility(View.VISIBLE);
+                    mChangeUNButton.setEnabled(true);
 
-                                    mChangeUNButton.setVisibility(View.VISIBLE);
-                                    mChangeUNButton.setEnabled(true);
+                    mDelAccButton.setVisibility(View.VISIBLE);
+                    mDelAccButton.setEnabled(true);
 
-                                    mDelAccButton.setVisibility(View.VISIBLE);
-                                    mDelAccButton.setEnabled(true);
-
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                    mLoginProgBar.setVisibility(View.INVISIBLE);
-                                    mLoginButton.setEnabled(true);
-                                }
-                            });
+                    //Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_createListFragment);
+                } else {
+                    mLoginProgBar.setVisibility(View.INVISIBLE);
+                    mLoginButton.setEnabled(true);
                 }
             }
         }
