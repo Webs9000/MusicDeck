@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -18,11 +17,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.websmobileapps.musicdeck.R;
@@ -57,6 +54,7 @@ public class LoginFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        mAuthViewModel.init();
     }
 
     @Override
@@ -126,10 +124,7 @@ public class LoginFragment extends Fragment {
     public void deleteAccount() {
         Log.d(TAG, "deleteAccount() called");
         try {
-            FirebaseUser currentUser = mAuthViewModel.getUserMutableLiveData().getValue();
-            String uid = Objects.requireNonNull(currentUser).getUid();
-            mReference.child("users").child(uid).removeValue();
-            currentUser.delete();
+            mAuthViewModel.deleteUser();
             mAuthViewModel.logout();
         }
         catch (Exception e) {
@@ -150,24 +145,30 @@ public class LoginFragment extends Fragment {
                 mLoginProgBar.setVisibility(View.VISIBLE);
                 mLoginButton.setEnabled(false);
 
-                if (mAuthViewModel.login(email, pass).isSuccessful()) {
-                    mLoginProgBar.setVisibility(View.INVISIBLE);
-                    mLoginButton.setEnabled(true);
+                mAuthViewModel.login(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            mLoginProgBar.setVisibility(View.INVISIBLE);
+                            mLoginButton.setEnabled(true);
 
-                    mChangeUNET.setVisibility(View.VISIBLE);
-                    mChangeUNET.setEnabled(true);
+                            mChangeUNET.setVisibility(View.VISIBLE);
+                            mChangeUNET.setEnabled(true);
 
-                    mChangeUNButton.setVisibility(View.VISIBLE);
-                    mChangeUNButton.setEnabled(true);
+                            mChangeUNButton.setVisibility(View.VISIBLE);
+                            mChangeUNButton.setEnabled(true);
 
-                    mDelAccButton.setVisibility(View.VISIBLE);
-                    mDelAccButton.setEnabled(true);
+                            mDelAccButton.setVisibility(View.VISIBLE);
+                            mDelAccButton.setEnabled(true);
 
-                    //Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_createListFragment);
-                } else {
-                    mLoginProgBar.setVisibility(View.INVISIBLE);
-                    mLoginButton.setEnabled(true);
-                }
+                            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_createDeckFragment);
+                        } else {
+                            Toast.makeText(requireContext(), "Login failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                            mLoginProgBar.setVisibility(View.INVISIBLE);
+                            mLoginButton.setEnabled(true);
+                        }
+                    }
+                });
             }
         }
         catch (Exception e) {

@@ -18,21 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.SignInMethodQueryResult;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.websmobileapps.musicdeck.Model.DatabaseModel;
-import com.websmobileapps.musicdeck.Model.DatabaseUser;
-import com.websmobileapps.musicdeck.Model.Deck;
 import com.websmobileapps.musicdeck.R;
 import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
-import com.websmobileapps.musicdeck.ViewModels.DatabaseViewModel;
 
 import java.util.Objects;
 
@@ -50,7 +38,6 @@ public class SignUpFragment extends Fragment {
     private ProgressBar mProgressBar;
 
     private AuthViewModel mAuthViewModel;
-    private DatabaseViewModel mDatabaseViewModel;
 
     public SignUpFragment() {
         // Required empty public constructor
@@ -72,23 +59,25 @@ public class SignUpFragment extends Fragment {
                 mSignUpButton.setEnabled(false);
 
                 // Attempt to add user to both Firebase Auth and DB
-                FirebaseUser user = mAuthViewModel.getUserMutableLiveData().getValue();
-                boolean successful = mAuthViewModel.register(userEmail, userPassword).isSuccessful()
-                        && mDatabaseViewModel.addUser(user, username).isSuccessful();
+                mAuthViewModel.register(userEmail, userPassword, username).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(getContext(), "User Created!", Toast.LENGTH_SHORT).show();
+                            mProgressBar.setVisibility(View.INVISIBLE);
+                            mSignUpButton.setEnabled(true);
+                            mUsernameET.setText("");
+                            mUserEmailET.setText("");
+                            mUserPasswordET.setText("");
 
-                if (successful) {
-                    Toast.makeText(getContext(), "User Created!", Toast.LENGTH_SHORT).show();
-                    mProgressBar.setVisibility(View.INVISIBLE);
-                    mSignUpButton.setEnabled(true);
-                    mUsernameET.setText("");
-                    mUserEmailET.setText("");
-                    mUserPasswordET.setText("");
-
-                    Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_createListFragment);
-                } else {
-                    mProgressBar.setVisibility(View.INVISIBLE);
-                    mSignUpButton.setEnabled(true);
-                }
+                            //Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_homeViewFragment);
+                        } else {
+                            Toast.makeText(requireContext(), "Sign up failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                            mProgressBar.setVisibility(View.INVISIBLE);
+                            mSignUpButton.setEnabled(true);
+                        }
+                    }
+                });
             }
         }
         catch (Exception e) {
@@ -133,7 +122,7 @@ public class SignUpFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
-        mDatabaseViewModel = new ViewModelProvider(requireActivity()).get(DatabaseViewModel.class);
+        mAuthViewModel.init();
     }
 
     @Override

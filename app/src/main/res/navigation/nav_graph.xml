@@ -11,8 +11,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_createListFragment"
-            app:destination="@id/createListFragment" />
+            android:id="@+id/action_loginFragment_to_createDeckFragment"
+            app:destination="@id/createDeckFragment2" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
@@ -20,15 +20,20 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up" >
         <action
-            android:id="@+id/action_signUpFragment_to_createListFragment"
-            app:destination="@id/createListFragment" />
+            android:id="@+id/action_signUpFragment_to_homeViewFragment"
+            app:destination="@id/homeViewFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/createListFragment"
-        android:name="com.websmobileapps.musicdeck.Fragments.CreateListFragment"
-        android:label="CreateListFragment" />
     <fragment
         android:id="@+id/sidebarFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.SidebarFragment"
         android:label="SidebarFragment" />
+    <fragment
+        android:id="@+id/homeViewFragment"
+        android:name="com.websmobileapps.musicdeck.Fragments.HomeViewFragment"
+        android:label="fragment_home_view"
+        tools:layout="@layout/fragment_home_view" />
+    <fragment
+        android:id="@+id/createDeckFragment2"
+        android:name="com.websmobileapps.musicdeck.Fragments.CreateDeckFragment"
+        android:label="CreateDeckFragment" />
 </navigation>

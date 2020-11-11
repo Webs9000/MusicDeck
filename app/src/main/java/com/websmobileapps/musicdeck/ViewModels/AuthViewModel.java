@@ -1,29 +1,42 @@
 package com.websmobileapps.musicdeck.ViewModels;
 
-import android.app.Application;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.websmobileapps.musicdeck.Model.AuthModel;
+import com.websmobileapps.musicdeck.Repository.Repo;
 
-public class AuthViewModel extends AndroidViewModel {
-    private AuthModel mAuthModel;
+import java.util.Objects;
+
+public class AuthViewModel extends ViewModel {
     private MutableLiveData<FirebaseUser> mUserMutableLiveData;
+    private MutableLiveData<String> mUsernameMLD;
+    private AuthModel mAuthModel;
 
-    public AuthViewModel(@NonNull Application application) {
-        super(application);
+    public void init() {
 
-        mAuthModel = new AuthModel(application);
+        if (mUserMutableLiveData != null) {
+            return;
+        }
+
+        mAuthModel = AuthModel.getInstance();
         mUserMutableLiveData = mAuthModel.getUserMutableLiveData();
     }
 
-    public Task<AuthResult> register(String email, String password) {
-        return mAuthModel.register(email, password);
+    public Task<Void> register(String email, String password, final String username) {
+        Task<AuthResult> authRegister = mAuthModel.register(email, password);
+
+        return authRegister.continueWithTask(new Continuation<AuthResult, Task<Void>>() {
+            @Override
+            public Task<Void> then(@NonNull Task<AuthResult> task) throws Exception {
+                return Repo.getInstance().addUser(Objects.requireNonNull(mAuthModel.getUserMutableLiveData().getValue()).getUid(), username);
+            }
+        });
     }
 
     public Task<AuthResult> login(String email, String password) {
@@ -34,7 +47,17 @@ public class AuthViewModel extends AndroidViewModel {
         mAuthModel.logout();
     }
 
+    public void deleteUser() {
+        String uid = Objects.requireNonNull(mAuthModel.getUserMutableLiveData().getValue()).getUid();
+        mAuthModel.deleteUser();
+        Repo.getInstance().deleteUser(uid);
+    }
+
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return mUserMutableLiveData;
+    }
+
+    public String getUsername(String uid) {
+        return Repo.getInstance().getUsername(uid).getValue();
     }
 }

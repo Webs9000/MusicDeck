@@ -2,6 +2,7 @@ package com.websmobileapps.musicdeck.Model;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +14,10 @@ public class DatabaseUser {
     public DatabaseUser() {}
 
     public DatabaseUser(String username) {
+        this.username = username;
+    }
+
+    public void setUsername(String username) {
         this.username = username;
     }
 
