@@ -9,72 +9,47 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.websmobileapps.musicdeck.Fragments.LoginFragment;
 import com.websmobileapps.musicdeck.Fragments.SignUpFragment;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
-    BottomNavigationView mBottomNavigationView;
-    SignUpFragment mSignUpFragment;
-    LoginFragment mLoginFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate() called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate() called");
 
-        initializeObjects();
-        replaceFragments(mSignUpFragment);
+        final BottomNavigationView bnv = findViewById(R.id.BNV);
+        bnv.setVisibility(View.VISIBLE);
 
-        mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        NavController  navCon = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
+
+        NavigationUI.setupWithNavController(bnv, navCon);
+
+        navCon.addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.itemSignUp:
-                        replaceFragments(mSignUpFragment);
-                        return true;
-                    case R.id.itemLogin:
-                        replaceFragments(mLoginFragment);
-                        return true;
-                    default:
-                        return false;
+            public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if (destination.getId() == R.id.signUpFragment || destination.getId() == R.id.loginFragment) {
+                    bnv.setVisibility(View.VISIBLE);
+                } else {
+                    bnv.setVisibility(View.GONE);
                 }
             }
         });
-    }
-
-    private void replaceFragments(Fragment fragment) {
-        try {
-            FragmentTransaction trans = getSupportFragmentManager().beginTransaction();
-            trans.replace(R.id.fragment_container, fragment).commit();
-        }
-        catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-
-    }
-    
-    private void initializeObjects() {
-        try {
-            mBottomNavigationView = findViewById(R.id.BNV);
-            mSignUpFragment = new SignUpFragment();
-            mLoginFragment = new LoginFragment();
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
     }
 
     @Override

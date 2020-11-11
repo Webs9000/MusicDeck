@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.SignUpFragment">
+    tools:context=".Fragments.SignUpFragment"
+    android:background="#B5E1F7">
 
     <TextView
         android:layout_width="wrap_content"

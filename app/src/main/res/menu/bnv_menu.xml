@@ -3,13 +3,13 @@
 
     <item
         android:title="@string/sign_up_menu"
-        android:id="@+id/itemSignUp"
+        android:id="@+id/signUpFragment"
         android:icon="@drawable/ic_signup"
         />
 
     <item
         android:title="@string/login_menu"
-        android:id="@+id/itemLogin"
+        android:id="@+id/loginFragment"
         android:icon="@drawable/ic_login"
         />
 
