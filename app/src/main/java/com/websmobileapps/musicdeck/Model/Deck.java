@@ -1,27 +1,28 @@
 package com.websmobileapps.musicdeck.Model;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Deck {
 
-    private String creatorUsername;
+    private String creator;
     private String title;
     private String subject;
-    private List<Card> listOfCards;
+    private final ArrayList<Card> cards;
 
     //One card starter, no title/subject yet
     public Deck(String title, String subject, String creator) {
         this.title = title;
         this.subject = subject;
-        this.creatorUsername = creator;
+        this.creator = creator;
+        this.cards = new ArrayList<>();
     }
 
-    public void addCard(Card newCard) {
-        listOfCards.add(newCard);
+    public String getCreator() {
+        return creator;
     }
 
-    public void removeCard(Card card) {
-        listOfCards.remove(card);
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getTitle() {
@@ -40,5 +41,15 @@ public class Deck {
         this.subject = subject;
     }
 
-    public String getCreatorUsername() { return creatorUsername; }
+    public ArrayList<Card> getCards() {
+        return cards;
+    }
+
+    public void addCard(Card card) {
+        this.cards.add(card);
+    }
+
+    public void removeCard(Card card) {
+        this.cards.remove(card);
+    }
 }
