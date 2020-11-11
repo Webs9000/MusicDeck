@@ -5,8 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,12 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.websmobileapps.musicdeck.Model.Deck;
-import com.websmobileapps.musicdeck.Model.HomeAdapter;
+import com.websmobileapps.musicdeck.Model.HomeViewHolder;
 import com.websmobileapps.musicdeck.R;
-import com.websmobileapps.musicdeck.ViewModels.DeckViewModel;
-
-import java.util.ArrayList;
+import com.websmobileapps.musicdeck.Repository.Repo;
 
 /**
  * Fragment for the home view.  Latest Decks are displayed in a recycler view.
@@ -27,9 +25,7 @@ import java.util.ArrayList;
 public class HomeViewFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private HomeAdapter mHomeAdapter;
-    private DeckViewModel mDeckViewModel;
-    View mHomeViewFragment;
+    private View mHomeView;
 
     public HomeViewFragment() {
         // Required empty public constructor
@@ -38,35 +34,51 @@ public class HomeViewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        mDeckViewModel = new ViewModelProvider(requireActivity()).get(DeckViewModel.class);
-        mDeckViewModel.init();
-        mDeckViewModel.getDecks().observe(getViewLifecycleOwner(), new Observer<ArrayList<Deck>>() {
-            @Override
-            public void onChanged(ArrayList<Deck> decks) {
-                mHomeAdapter.notifyDataSetChanged();
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mHomeViewFragment = inflater.inflate(R.layout.fragment_home_view, container, false);
+        mHomeView = inflater.inflate(R.layout.fragment_home_view, container, false);
 
-        mRecyclerView = mHomeViewFragment.findViewById(R.id.homeRecycler);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        mHomeAdapter = new HomeAdapter(mDeckViewModel.getDecks().getValue());
-
-        mRecyclerView.setAdapter(mHomeAdapter);
-
-        return mHomeViewFragment;
+        return mHomeView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        mRecyclerView = mHomeView.findViewById(R.id.homeRecycler);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        FirebaseRecyclerOptions<Deck> options =
+                new FirebaseRecyclerOptions.Builder<Deck>()
+                .setQuery(Repo.getInstance().getDecksRef(), Deck.class)
+                .build();
+
+        FirebaseRecyclerAdapter<Deck, HomeViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Deck, HomeViewHolder>(options) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull HomeViewHolder holder, int position, @NonNull Deck model) {
+
+                        holder.setitem(model.getTitle(), model.getCreator());
+
+                    }
+
+                    @NonNull
+                    @Override
+                    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                        View view = LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.item_deck, parent, false);
+
+                        return new HomeViewHolder(view);
+                    }
+                };
+
+        firebaseRecyclerAdapter.startListening();
+        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+
     }
 }

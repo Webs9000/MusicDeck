@@ -17,7 +17,7 @@ public class HomeViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void setitem(FragmentActivity activity, String creator, String title) {
+    public void setitem(String creator, String title) {
 
         titleTV = itemView.findViewById(R.id.item_title);
         creatorTV = itemView.findViewById(R.id.item_creator);

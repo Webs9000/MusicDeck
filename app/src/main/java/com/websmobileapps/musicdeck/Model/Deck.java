@@ -7,22 +7,16 @@ public class Deck {
     private String creator;
     private String title;
     private String subject;
-    private final ArrayList<Card> cards;
+    private ArrayList<Card> cards;
 
-    //One card starter, no title/subject yet
-    public Deck(String title, String subject, String creator) {
+    public Deck(){
+    }
+
+    public Deck(String creator, String title, String subject) {
+        this.creator = creator;
         this.title = title;
         this.subject = subject;
-        this.creator = creator;
         this.cards = new ArrayList<>();
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
     }
 
     public String getTitle() {
@@ -31,6 +25,14 @@ public class Deck {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
     }
 
     public String getSubject() {
