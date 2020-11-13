@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/qrCodeDisplayFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -36,4 +36,13 @@
         android:id="@+id/createDeckFragment2"
         android:name="com.websmobileapps.musicdeck.Fragments.CreateDeckFragment"
         android:label="CreateDeckFragment" />
+    <fragment
+        android:id="@+id/qrCodeScannerFragment"
+        android:name="com.websmobileapps.musicdeck.Fragments.QrCodeScannerFragment"
+        android:label="QrCodeScannerFragment" />
+    <fragment
+        android:id="@+id/qrCodeDisplayFragment"
+        android:name="com.websmobileapps.musicdeck.Fragments.qrCodeDisplayFragment"
+        android:label="fragment_qr_code_display"
+        tools:layout="@layout/fragment_qr_code_display" />
 </navigation>

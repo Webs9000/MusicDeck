@@ -56,8 +56,4 @@ public class AuthViewModel extends ViewModel {
     public MutableLiveData<FirebaseUser> getUserMutableLiveData() {
         return mUserMutableLiveData;
     }
-
-    public String getUsername(String uid) {
-        return Repo.getInstance().getUsername(uid).getValue();
-    }
 }
