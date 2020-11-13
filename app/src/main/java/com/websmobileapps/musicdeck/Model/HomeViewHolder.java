@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.websmobileapps.musicdeck.R;
@@ -17,7 +16,7 @@ public class HomeViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
     }
 
-    public void setitem(String creator, String title) {
+    public void setItem(String title, String creator) {
 
         titleTV = itemView.findViewById(R.id.item_title);
         creatorTV = itemView.findViewById(R.id.item_creator);

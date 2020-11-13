@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,9 +61,18 @@ public class HomeViewFragment extends Fragment {
         FirebaseRecyclerAdapter<Deck, HomeViewHolder> firebaseRecyclerAdapter =
                 new FirebaseRecyclerAdapter<Deck, HomeViewHolder>(options) {
                     @Override
-                    protected void onBindViewHolder(@NonNull HomeViewHolder holder, int position, @NonNull Deck model) {
+                    protected void onBindViewHolder(@NonNull HomeViewHolder holder, final int position, @NonNull final Deck model) {
 
-                        holder.setitem(model.getTitle(), model.getCreator());
+                        holder.setItem(model.getTitle(), model.getCreator());
+                        holder.itemView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String key = getRef(position).getKey();
+                                Repo.getInstance().setCurrentDeck(key, model.getTitle(), model.getCreator());
+
+                                Navigation.findNavController(requireView()).navigate(R.id.action_homeViewFragment_to_deckViewFragment);
+                            }
+                        });
 
                     }
 

@@ -161,7 +161,7 @@ public class LoginFragment extends Fragment {
                             mDelAccButton.setVisibility(View.VISIBLE);
                             mDelAccButton.setEnabled(true);
 
-                            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_createDeckFragment);
+                            Navigation.findNavController(requireView()).navigate(R.id.action_loginFragment_to_homeViewFragment);
                         } else {
                             Toast.makeText(requireContext(), "Login failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             mLoginProgBar.setVisibility(View.INVISIBLE);

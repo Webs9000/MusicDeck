@@ -21,6 +21,9 @@ public class Repo {
 
     static Repo instance;
     static DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
+    String currentDeckUID;
+    String currentDeckTitle;
+    String currentDeckCreator;
 
     public static Repo getInstance() {
 
@@ -40,6 +43,10 @@ public class Repo {
     // Retrieve user's decks
 
     // Retrieve reference to a user
+    public DatabaseReference getRootRef() {
+        return mReference;
+    }
+
     public DatabaseReference getUserRef(String uid) {
         return mReference.child("users").child(uid);
     }
@@ -56,7 +63,28 @@ public class Repo {
 
     // Add a new Deck
 
-    // Retrieve a Deck
+    // Retrieve reference for a particular deck's Cards.  This case takes 3 methods.
+    public DatabaseReference getCards(String deckUID) {
+        return mReference.child("decks").child(deckUID).child("cards");
+    }
+
+    public void setCurrentDeck(String deckUID, String title, String creator) {
+        currentDeckUID = deckUID;
+        currentDeckTitle = title;
+        currentDeckCreator = creator;
+    }
+
+    public String getCurrentDeckUID() {
+        return currentDeckUID;
+    }
+
+    public String getCurrentDeckTitle() {
+        return currentDeckTitle;
+    }
+
+    public String getCurrentDeckCreator() {
+        return currentDeckCreator;
+    }
 
     // Update a Deck
 }

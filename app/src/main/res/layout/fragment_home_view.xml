@@ -3,9 +3,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragments.HomeViewFragment">
+    tools:context=".Fragments.HomeViewFragment"
+    android:background="#B5E1F7">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:src="@drawable/app_logo"
+        android:id="@+id/home_IV"
+        android:contentDescription="@string/app_logo"
+        />
+
+    <TextView
+        android:layout_below="@id/home_IV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/latest_lists"
+        android:id="@+id/latest_list_TV"
+        android:textSize="25sp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_below="@id/latest_list_TV"
         android:id="@+id/homeRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -19,7 +19,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.websmobileapps.musicdeck.Model.DatabaseUser;
 import com.websmobileapps.musicdeck.Model.Deck;
@@ -27,6 +26,8 @@ import com.websmobileapps.musicdeck.R;
 import com.websmobileapps.musicdeck.Repository.Repo;
 import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -38,12 +39,10 @@ public class CreateDeckFragment extends Fragment {
     View mCreateListFragment;
     private EditText mListTitle, mListDesc;
     private Button mCreateButton;
-
-    private FirebaseDatabase mRootNode;
     private DatabaseReference mReference;
+    private Repo mRepo;
 
     private AuthViewModel mAuthViewModel;
-    private FirebaseUser mCurrentUser;
 
     public CreateDeckFragment() {
         // Required empty public constructor
@@ -62,10 +61,8 @@ public class CreateDeckFragment extends Fragment {
             mListDesc = mCreateListFragment.findViewById(R.id.descET);
 
             // Get database refs
-            mRootNode = FirebaseDatabase.getInstance();
-            mReference = mRootNode.getReference().child("decks");
-
-            mCurrentUser = mAuthViewModel.getUserMutableLiveData().getValue();
+            mRepo = Repo.getInstance();
+            mReference = mRepo.getRootRef();
 
             mCreateButton = mCreateListFragment.findViewById(R.id.createButton);
             mCreateButton.setOnClickListener(new View.OnClickListener() {
@@ -73,18 +70,22 @@ public class CreateDeckFragment extends Fragment {
                 public void onClick(View view) {
 
                     // Create a deck.
-                    final String uid = mReference.push().getKey();
+                    final String uid = mReference.child("decks").push().getKey();
                     final String title = mListTitle.getText().toString();
                     final String subject = mListDesc.getText().toString();
-
                     final String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
                     Repo.getInstance().getUserRef(userUID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             DatabaseUser user = snapshot.getValue(DatabaseUser.class);
                             String username = Objects.requireNonNull(user).getUsername();
-                            Deck newDeck = new Deck(title, subject, username);
-                            mReference.child(Objects.requireNonNull(uid)).setValue(newDeck)
+                            Deck newDeck = new Deck(username, title, subject);
+
+                            Map<String, Object> fanoutObject = new HashMap<>();
+                            fanoutObject.put("/decks/" + uid, newDeck);
+                            fanoutObject.put("/users/" + userUID + "/decks/" + uid, newDeck);
+
+                            mReference.updateChildren(fanoutObject)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -96,7 +97,7 @@ public class CreateDeckFragment extends Fragment {
                                                 Toast.makeText(requireContext(), "Deck create failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                                             }
                                         }
-                            });
+                           });
                         }
 
                         @Override
@@ -104,23 +105,6 @@ public class CreateDeckFragment extends Fragment {
 
                         }
                     });
-
-//                    Deck newDeck = new Deck(title, subject, userUID);
-//                    mReference.child(Objects.requireNonNull(uid)).setValue(newDeck)
-//                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    if (task.isSuccessful()) {
-//                                        Toast.makeText(requireContext(),"Deck created!", Toast.LENGTH_SHORT).show();
-//                                        mListTitle.setText("");
-//                                        mListDesc.setText("");
-//                                    } else {
-//                                        Toast.makeText(requireContext(), "Deck create failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }
-//                            });
-
-                    // Update the current user's database entry with the new deck
                 }
             });
         }

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.DeckViewFragment"
+    android:background="@android:color/darker_gray"
+    android:paddingStart="50dp"
+    android:paddingEnd="50dp">
+
+    <TextView
+        android:paddingTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deck title"
+        android:textSize="25sp"
+        android:textColor="@android:color/white"
+        android:id="@+id/deck_view_title_TV"
+        />
+
+    <LinearLayout
+        android:layout_below="@id/deck_view_title_TV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/deck_view_header">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/by"
+            android:textSize="25sp"
+            android:textColor="@android:color/white"
+            />
+
+        <TextView
+            android:id="@+id/deck_view_creator_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Someone"
+            android:textSize="25sp"
+            android:textColor="@android:color/white"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            />
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/deck_view_header"
+        android:id="@+id/deck_view_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</RelativeLayout>

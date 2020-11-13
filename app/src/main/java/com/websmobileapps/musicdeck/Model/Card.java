@@ -1,34 +1,34 @@
 package com.websmobileapps.musicdeck.Model;
 
-
-import java.util.Calendar;
-
 public class Card {
+
     private String title;
     private String artist;
     private int listRank;
-    private Object albumArt;
-    private Calendar publicationDate;
+    private String artURL;
+    private String publicationDate;
     private int rating;
     private String favTrack;
 
-    //Do nothing constructor, if using getter/setters
+    //Do nothing constructor, required for firebase
     public Card() {
-
     }
+
     //Everything required constructor
-    public Card(String title, String artist, int listRank, Object albumArt, Calendar publicationDate) {
+    public Card(String title, String artist, int listRank, String artURL, String publicationDate) {
         this.title = title;
         this.artist = artist;
         this.listRank = listRank;
-        this.albumArt = albumArt;
+        this.artURL = artURL;
         this.publicationDate = publicationDate;
     }
+
     //Everything constructor
-    public Card(String title, String artist, int listRank, Object albumArt, Calendar publicationDate, int rating, String favTrack){
+    public Card(String title, String artist, int listRank, String artURL, String publicationDate, int rating, String favTrack){
         this.title = title;
         this.artist = artist;
-        this.albumArt = albumArt;
+        this.listRank = listRank;
+        this.artURL = artURL;
         this.publicationDate = publicationDate;
         this.rating = rating;
         this.favTrack = favTrack;
@@ -58,19 +58,19 @@ public class Card {
         this.listRank = listRank;
     }
 
-    public Object getAlbumArt() {
-        return albumArt;
+    public String getArtURL() {
+        return artURL;
     }
 
-    public void setAlbumArt(Object albumArt) {
-        this.albumArt = albumArt;
+    public void setArtURL(String artURL) {
+        this.artURL = artURL;
     }
 
-    public Calendar getPublicationDate() {
+    public String getPublicationDate() {
         return publicationDate;
     }
 
-    public void setPublicationDate(Calendar publicationDate) {
+    public void setPublicationDate(String publicationDate) {
         this.publicationDate = publicationDate;
     }
 
