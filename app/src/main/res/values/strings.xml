@@ -37,4 +37,7 @@
     <string name="latest_lists">Latest Lists:</string>
     <string name="menu_button">menu button</string>
     <string name="share_button">share button</string>
+    <string name="list_rank">List Rank</string>
+    <string name="confirm_selection">Confirm Selection</string>
+    <string name="submit">Submit</string>
 </resources>
