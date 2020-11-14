@@ -74,7 +74,7 @@ public class CreateDeckFragment extends Fragment {
                     final String title = mListTitle.getText().toString();
                     final String subject = mListDesc.getText().toString();
                     final String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
-                    Repo.getInstance().getUserRef(userUID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    mRepo.getUserRef(userUID).addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             DatabaseUser user = snapshot.getValue(DatabaseUser.class);

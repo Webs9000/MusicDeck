@@ -56,6 +56,11 @@ public class Repo {
         return mReference.child("decks");
     }
 
+    // Retrieve a ref to a particular deck
+    public DatabaseReference getDeckRef(String UID) {
+        return mReference.child("decks").child(UID);
+    }
+
     //delete a user
     public void deleteUser(String uid) {
         mReference.child("users").child(uid).removeValue();

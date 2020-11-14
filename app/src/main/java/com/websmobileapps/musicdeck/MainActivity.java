@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -36,7 +37,10 @@ public class MainActivity extends AppCompatActivity {
         final BottomNavigationView bnv = findViewById(R.id.BNV);
         bnv.setVisibility(View.VISIBLE);
 
-        NavController  navCon = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
+        final ImageButton menu_button = findViewById(R.id.menu_button);
+        menu_button.setVisibility(View.GONE);
+
+        final NavController  navCon = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment);
 
         NavigationUI.setupWithNavController(bnv, navCon);
 
@@ -45,9 +49,18 @@ public class MainActivity extends AppCompatActivity {
             public void onDestinationChanged(@NonNull NavController controller, @NonNull NavDestination destination, @Nullable Bundle arguments) {
                 if (destination.getId() == R.id.signUpFragment || destination.getId() == R.id.loginFragment) {
                     bnv.setVisibility(View.VISIBLE);
+                    menu_button.setVisibility(View.GONE);
                 } else {
                     bnv.setVisibility(View.GONE);
+                    menu_button.setVisibility(View.VISIBLE);
                 }
+            }
+        });
+
+        menu_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navCon.navigate(R.id.sidebarFragment);
             }
         });
     }
