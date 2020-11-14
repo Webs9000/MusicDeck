@@ -17,13 +17,16 @@ import com.websmobileapps.musicdeck.Model.Deck;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import de.umass.lastfm.Album;
+
 public class Repo {
 
     static Repo instance;
     static DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
-    String currentDeckUID;
-    String currentDeckTitle;
-    String currentDeckCreator;
+    private String currentDeckUID;
+    private String currentDeckTitle;
+    private String currentDeckCreator;
+    private Album currentAlbum;
 
     public static Repo getInstance() {
 
@@ -90,6 +93,16 @@ public class Repo {
     public String getCurrentDeckCreator() {
         return currentDeckCreator;
     }
+
+    public void setAlbum(Album album) {
+        currentAlbum = album;
+    }
+
+    public Album getCurrentAlbum() {
+        return currentAlbum;
+    }
+
+
 
     // Update a Deck
 }

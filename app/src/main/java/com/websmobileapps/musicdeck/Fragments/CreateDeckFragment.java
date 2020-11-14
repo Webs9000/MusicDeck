@@ -81,11 +81,11 @@ public class CreateDeckFragment extends Fragment {
                             String username = Objects.requireNonNull(user).getUsername();
                             Deck newDeck = new Deck(username, title, subject);
 
-                            Map<String, Object> fanoutObject = new HashMap<>();
-                            fanoutObject.put("/decks/" + uid, newDeck);
-                            fanoutObject.put("/users/" + userUID + "/decks/" + uid, newDeck);
+                            Map<String, Object> fanOutObject = new HashMap<>();
+                            fanOutObject.put("/decks/" + uid, newDeck);
+                            fanOutObject.put("/users/" + userUID + "/decks/" + uid, newDeck);
 
-                            mReference.updateChildren(fanoutObject)
+                            mReference.updateChildren(fanOutObject)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -98,6 +98,8 @@ public class CreateDeckFragment extends Fragment {
                                             }
                                         }
                            });
+
+                            mRepo.setCurrentDeck(uid, title, username);
                         }
 
                         @Override
@@ -121,4 +123,6 @@ public class CreateDeckFragment extends Fragment {
         attachToXML();
         return mCreateListFragment;
     }
+
+
 }

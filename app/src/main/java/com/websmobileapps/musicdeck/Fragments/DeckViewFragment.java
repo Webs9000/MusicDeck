@@ -78,7 +78,7 @@ public class DeckViewFragment extends Fragment {
 
         FirebaseRecyclerOptions<Card> options =
                 new FirebaseRecyclerOptions.Builder<Card>()
-                        .setQuery(mRepo.getCards(deckUID), Card.class)
+                        .setQuery(mRepo.getCards(deckUID).orderByChild("listRank"), Card.class)
                         .build();
 
         FirebaseRecyclerAdapter<Card, CardViewHolder> firebaseRecyclerAdapter =
