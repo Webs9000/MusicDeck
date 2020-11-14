@@ -40,4 +40,7 @@
     <string name="list_rank">List Rank</string>
     <string name="confirm_selection">Confirm Selection</string>
     <string name="submit">Submit</string>
+    <string name="search">Search...</string>
+    <string name="search_for_an_album">Search for an album:</string>
+    <string name="search2">Search</string>
 </resources>
