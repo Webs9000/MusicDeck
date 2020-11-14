@@ -16,6 +16,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.websmobileapps.musicdeck.R;
+import com.websmobileapps.musicdeck.Repository.Repo;
 
 
 public class qrCodeDisplayFragment extends Fragment {
@@ -33,7 +34,7 @@ public class qrCodeDisplayFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_qr_code_display, container, false);
-        this.setFirebaseUID("testTestTest");
+        this.setFirebaseUID(Repo.getInstance().getCurrentDeckUID());
         MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
         try {
             BitMatrix bitMatrix = multiFormatWriter.encode(firebaseUID, BarcodeFormat.QR_CODE,200,200);

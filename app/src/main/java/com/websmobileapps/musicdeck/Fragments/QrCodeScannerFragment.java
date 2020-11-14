@@ -1,17 +1,23 @@
 package com.websmobileapps.musicdeck.Fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
-import com.google.android.material.datepicker.MaterialTextInputPicker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
-import com.websmobileapps.musicdeck.MainActivity;
+import com.websmobileapps.musicdeck.Model.Deck;
+import com.websmobileapps.musicdeck.R;
+import com.websmobileapps.musicdeck.Repository.Repo;
 
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
@@ -22,7 +28,6 @@ public class QrCodeScannerFragment extends Fragment implements ZXingScannerView.
     public void onCreate(Bundle state) {
         super.onCreate(state);
         mScannerView = new ZXingScannerView(getContext());
-        Log.i("QR_Code", "Ran onCreate for QR Scanner");
     }
 
     @Override
@@ -45,7 +50,21 @@ public class QrCodeScannerFragment extends Fragment implements ZXingScannerView.
     }
 
     @Override
-    public void handleResult(Result rawResult) {
+    public void handleResult(final Result rawResult) {
         Toast.makeText(getContext(), rawResult.getText(), Toast.LENGTH_SHORT).show();
+        DatabaseReference dbRef = Repo.getInstance().getDeckRef(rawResult.getText());
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Deck deck = snapshot.getValue(Deck.class);
+                Repo.getInstance().setCurrentDeck(rawResult.getText(), deck.getTitle(), deck.getCreator());
+                Navigation.findNavController(requireView()).navigate(R.id.action_qrCodeScannerFragment_to_deckViewFragment);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

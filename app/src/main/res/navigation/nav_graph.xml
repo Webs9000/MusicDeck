@@ -54,7 +54,11 @@
     <fragment
         android:id="@+id/qrCodeScannerFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.QrCodeScannerFragment"
-        android:label="QrCodeScannerFragment" />
+        android:label="QrCodeScannerFragment" >
+        <action
+            android:id="@+id/action_qrCodeScannerFragment_to_deckViewFragment"
+            app:destination="@id/deckViewFragment" />
+    </fragment>
     <fragment
         android:id="@+id/qrCodeDisplayFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.qrCodeDisplayFragment"
