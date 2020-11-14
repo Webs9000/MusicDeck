@@ -35,6 +35,9 @@
         <action
             android:id="@+id/action_homeViewFragment_to_deckViewFragment"
             app:destination="@id/deckViewFragment" />
+        <action
+            android:id="@+id/action_homeViewFragment_to_qrCodeScannerFragment"
+            app:destination="@id/qrCodeScannerFragment" />
     </fragment>
     <fragment
         android:id="@+id/createDeckFragment"
@@ -43,7 +46,11 @@
     <fragment
         android:id="@+id/deckViewFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.DeckViewFragment"
-        android:label="DeckViewFragment" />
+        android:label="DeckViewFragment" >
+        <action
+            android:id="@+id/action_deckViewFragment_to_qrCodeDisplayFragment"
+            app:destination="@id/qrCodeDisplayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/qrCodeScannerFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.QrCodeScannerFragment"
