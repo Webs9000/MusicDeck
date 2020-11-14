@@ -35,10 +35,19 @@
         android:text="View Profile" />
 
     <Button
+        android:id="@+id/qrCodeScannerButton"
+        android:layout_width="194dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:text="Scan QR Code" />
+
+    <Button
         android:id="@+id/button3"
         android:layout_width="194dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:text="Sign Out" />
+
+
 
 </LinearLayout>

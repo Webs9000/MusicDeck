@@ -51,7 +51,6 @@ public class QrCodeScannerFragment extends Fragment implements ZXingScannerView.
 
     @Override
     public void handleResult(final Result rawResult) {
-        Toast.makeText(getContext(), rawResult.getText(), Toast.LENGTH_SHORT).show();
         DatabaseReference dbRef = Repo.getInstance().getDeckRef(rawResult.getText());
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

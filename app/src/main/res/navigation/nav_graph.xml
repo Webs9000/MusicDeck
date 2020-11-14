@@ -26,7 +26,11 @@
     <fragment
         android:id="@+id/sidebarFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.SidebarFragment"
-        android:label="SidebarFragment" />
+        android:label="SidebarFragment" >
+        <action
+            android:id="@+id/action_sidebarFragment_to_qrCodeScannerFragment"
+            app:destination="@id/qrCodeScannerFragment" />
+    </fragment>
     <fragment
         android:id="@+id/homeViewFragment"
         android:name="com.websmobileapps.musicdeck.Fragments.HomeViewFragment"
