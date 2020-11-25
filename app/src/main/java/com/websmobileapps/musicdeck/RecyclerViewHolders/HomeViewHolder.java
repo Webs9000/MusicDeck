@@ -1,4 +1,4 @@
-package com.websmobileapps.musicdeck.Model;
+package com.websmobileapps.musicdeck.RecyclerViewHolders;
 
 import android.view.View;
 import android.widget.TextView;

@@ -8,7 +8,7 @@ import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
-import com.websmobileapps.musicdeck.Model.AuthModel;
+import com.websmobileapps.musicdeck.Repository.AuthModel;
 import com.websmobileapps.musicdeck.Repository.Repo;
 
 import java.util.Objects;

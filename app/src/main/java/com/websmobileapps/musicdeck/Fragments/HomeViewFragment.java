@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.websmobileapps.musicdeck.Model.Deck;
-import com.websmobileapps.musicdeck.Model.HomeViewHolder;
+import com.websmobileapps.musicdeck.RecyclerViewHolders.HomeViewHolder;
 import com.websmobileapps.musicdeck.R;
 import com.websmobileapps.musicdeck.Repository.Repo;
 

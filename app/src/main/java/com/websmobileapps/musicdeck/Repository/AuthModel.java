@@ -1,12 +1,7 @@
-package com.websmobileapps.musicdeck.Model;
+package com.websmobileapps.musicdeck.Repository;
 
-import android.content.Context;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

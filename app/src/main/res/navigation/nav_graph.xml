@@ -68,4 +68,13 @@
         android:name="com.websmobileapps.musicdeck.Fragments.qrCodeDisplayFragment"
         android:label="fragment_qr_code_display"
         tools:layout="@layout/fragment_qr_code_display" />
+    <fragment
+        android:id="@+id/addCardFragment"
+        android:name="com.websmobileapps.musicdeck.Fragments.AddCardFragment"
+        android:label="AddCardFragment" />
+    <fragment
+        android:id="@+id/submitCardFragment"
+        android:name="com.websmobileapps.musicdeck.Fragments.SubmitCardFragment"
+        android:label="fragment_submit_card"
+        tools:layout="@layout/fragment_submit_card" />
 </navigation>

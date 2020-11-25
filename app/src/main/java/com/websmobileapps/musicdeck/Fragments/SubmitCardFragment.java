@@ -84,7 +84,7 @@ public class SubmitCardFragment extends Fragment {
                         // Instantiate the Repo
                         Repo r = Repo.getInstance();
                         // Grab the current deck from the repo
-                        final String deck = r.getCurrentDeckUID();
+                        final String deckUID = r.getCurrentDeckUID();
                         // Grab the user ID
                         final String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
                         // Grab all the album details
@@ -104,27 +104,28 @@ public class SubmitCardFragment extends Fragment {
                         final String publicationDate = releaseDate.toString();
 
                         // Form the card object
-                        Card c = new Card(name, artist, listRank, albumArt, publicationDate, rating, favTrack);
+                        Card newCard = new Card(name, artist, listRank, albumArt, publicationDate, rating, favTrack);
 
                         // Write to the database
-//                        DatabaseReference ref = Repo.getInstance().getRootRef();
-//                        Map<String, Object> fanOutObject = new HashMap<>();
-//                        fanOutObject.put("/decks/" + uid, newDeck);
-//                        fanOutObject.put("/users/" + userUID + "/decks/" + uid, newDeck);
-//
-//                        mReference.updateChildren(fanOutObject)
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            Toast.makeText(requireContext(),"Deck created!", Toast.LENGTH_SHORT).show();
-//                                            mListTitle.setText("");
-//                                            mListDesc.setText("");
-//                                        } else {
-//                                            Toast.makeText(requireContext(), "Deck create failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                });
+                        DatabaseReference ref = Repo.getInstance().getRootRef();
+                        String cardUID = ref.child("decks").child(deckUID).child("cards").push().getKey();
+                        Map<String, Object> fanOutObject = new HashMap<>();
+                        fanOutObject.put("/decks/" + deckUID + "/cards/" + cardUID, newCard);
+                        fanOutObject.put("/users/" + userUID + "/decks/" + deckUID + "/cards/" + cardUID, newCard);
+
+                        ref.updateChildren(fanOutObject)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(requireContext(),"Card added!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(requireContext(), "Card add failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
+
+                        // Navigate back to deck edit
 
 
                     }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavAction;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +18,7 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.websmobileapps.musicdeck.Model.Card;
-import com.websmobileapps.musicdeck.Model.CardViewHolder;
+import com.websmobileapps.musicdeck.RecyclerViewHolders.CardViewHolder;
 import com.websmobileapps.musicdeck.R;
 import com.websmobileapps.musicdeck.Repository.Repo;
 

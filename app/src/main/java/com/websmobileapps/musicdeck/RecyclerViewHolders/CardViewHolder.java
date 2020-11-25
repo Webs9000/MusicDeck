@@ -1,4 +1,4 @@
-package com.websmobileapps.musicdeck.Model;
+package com.websmobileapps.musicdeck.RecyclerViewHolders;
 
 import android.net.Uri;
 import android.view.View;

@@ -100,6 +100,8 @@ public class CreateDeckFragment extends Fragment {
                            });
 
                             mRepo.setCurrentDeck(uid, title, username);
+
+                            // Navigate to deck edit view
                         }
 
                         @Override
