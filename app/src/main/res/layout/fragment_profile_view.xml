@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragments.HomeViewFragment"
+    android:background="#B5E1F7">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/current_user"
+        android:id="@+id/current_user_TV"
+        android:textSize="25sp"
+        android:padding="25dp"
+        android:gravity="center"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/current_user_TV"
+        android:id="@+id/new_deck_button"
+        android:text="@string/new_deck"
+        android:textSize="20sp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:layout_below="@id/new_deck_button"
+        android:id="@+id/profileRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</RelativeLayout>

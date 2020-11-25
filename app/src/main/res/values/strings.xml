@@ -43,4 +43,11 @@
     <string name="search">Search...</string>
     <string name="search_for_an_album">Search for an album:</string>
     <string name="search2">Search</string>
+    <string name="current_user">Current User</string>
+    <string name="view_profile">View Profile</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="new_deck">New Deck</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="home">Home</string>
 </resources>

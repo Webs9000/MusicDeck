@@ -70,7 +70,7 @@ public class SignUpFragment extends Fragment {
                             mUserEmailET.setText("");
                             mUserPasswordET.setText("");
 
-                            Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_createDeckFragment);
+                            Navigation.findNavController(requireView()).navigate(R.id.action_signUpFragment_to_homeViewFragment);
                         } else {
                             Toast.makeText(requireContext(), "Sign up failed: " + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             mProgressBar.setVisibility(View.INVISIBLE);

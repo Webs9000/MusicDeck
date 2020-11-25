@@ -44,6 +44,9 @@ public class Repo {
     }
 
     // Retrieve user's decks
+    public DatabaseReference getUserDecks(String UID) {
+        return mReference.child("users").child(UID).child("decks");
+    }
 
     // Retrieve reference to a user
     public DatabaseReference getRootRef() {

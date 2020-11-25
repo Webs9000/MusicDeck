@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.websmobileapps.musicdeck.R;
 
-public class HomeViewHolder extends RecyclerView.ViewHolder {
+public class DeckViewHolder extends RecyclerView.ViewHolder {
 
     TextView titleTV, creatorTV;
 
-    public HomeViewHolder(@NonNull View itemView) {
+    public DeckViewHolder(@NonNull View itemView) {
         super(itemView);
     }
 

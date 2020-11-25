@@ -79,50 +79,6 @@
         android:id="@+id/loginButton"
         />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/loginButton"
-        android:id="@+id/changeUsernameET"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:hint="Enter a new username"
-        android:inputType="text"
-        android:textSize="15sp"
-        android:layout_marginTop="20dp"
-        android:visibility="invisible"
-        android:enabled="false"
-        android:importantForAutofill="no"
-        />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Change Username!"
-        android:textSize="13sp"
-        android:padding="10dp"
-        android:layout_below="@id/changeUsernameET"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="5dp"
-        android:id="@+id/changeUNButton"
-        android:visibility="invisible"
-        android:enabled="false"
-    />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Delete Account!"
-        android:textSize="13sp"
-        android:padding="10dp"
-        android:layout_below="@id/changeUNButton"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="50dp"
-        android:id="@+id/accDelButton"
-        android:visibility="invisible"
-        android:enabled="false"
-    />
-
     <ProgressBar
         android:layout_width="50dp"
         android:layout_height="50dp"

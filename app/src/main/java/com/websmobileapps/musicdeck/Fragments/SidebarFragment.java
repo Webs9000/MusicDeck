@@ -1,7 +1,10 @@
 package com.websmobileapps.musicdeck.Fragments;
 
 import android.os.Bundle;
+
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
@@ -10,20 +13,70 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.websmobileapps.musicdeck.R;
+import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 
 public class SidebarFragment extends Fragment {
+
+    private View mSidebarFragment;
+    private Button mQRCodeBTN, mProfileBTN, mSignOutBTN, mDelAccBTN, mHomeBTN;
+
+    private AuthViewModel mAuthViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        mAuthViewModel.init();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sidebar_view, container, false);
-        Button qrCodeButton = view.findViewById(R.id.qrCodeScannerButton);
+        mSidebarFragment = inflater.inflate(R.layout.sidebar_view, container, false);
 
-        qrCodeButton.setOnClickListener(new View.OnClickListener() {
+        mHomeBTN = mSidebarFragment.findViewById(R.id.home_button);
+        mHomeBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(requireView()).navigate(R.id.action_sidebarFragment_to_homeViewFragment);
+            }
+        });
+
+        mProfileBTN = mSidebarFragment.findViewById(R.id.profile_button);
+        mProfileBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Navigation.findNavController(requireView()).navigate(R.id.action_sidebarFragment_to_profileViewFragment);
+            }
+        });
+
+
+        mQRCodeBTN = mSidebarFragment.findViewById(R.id.qrCodeScannerButton);
+        mQRCodeBTN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Navigation.findNavController(requireView()).navigate(R.id.action_sidebarFragment_to_qrCodeScannerFragment);
             }
         });
 
-        return view;
+        mSignOutBTN = mSidebarFragment.findViewById(R.id.sign_out_button);
+        mSignOutBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuthViewModel.logout();
+                Navigation.findNavController(requireView()).navigate(R.id.action_sidebarFragment_to_loginFragment);
+            }
+        });
+
+        mDelAccBTN = mSidebarFragment.findViewById(R.id.delete_button);
+        mDelAccBTN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mAuthViewModel.deleteUser();
+                Navigation.findNavController(requireView()).navigate(R.id.action_sidebarFragment_to_signUpFragment);
+            }
+        });
+
+        return mSidebarFragment;
     }
 }
