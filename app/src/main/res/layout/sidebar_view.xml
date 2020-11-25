@@ -16,7 +16,7 @@
         />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/SB_current_user"
         android:layout_width="194dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
