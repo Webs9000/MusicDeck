@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/smaller_eat_it"
+            android:src="@drawable/no_image_available"
             android:layout_gravity="center"
             android:contentDescription="@string/album_art"
             android:paddingTop="10dp"

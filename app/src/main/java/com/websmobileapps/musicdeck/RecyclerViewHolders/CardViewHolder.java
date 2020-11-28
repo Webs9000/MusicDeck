@@ -33,7 +33,10 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
         rateBar = itemView.findViewById(R.id.card_item_rate_bar);
 
         try {
-            Glide.with(itemView).load(Uri.parse(artURL)).into(albumArtIV);
+            Glide.with(itemView)
+                    .load(Uri.parse(artURL))
+                    .placeholder(R.drawable.no_image_available)
+                    .into(albumArtIV);
         } catch (Exception e) {
             // Nothing to do here
         }

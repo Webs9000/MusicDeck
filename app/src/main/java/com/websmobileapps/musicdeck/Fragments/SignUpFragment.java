@@ -46,6 +46,7 @@ public class SignUpFragment extends Fragment {
     // Creates a new Firebase User.  That user is also added to our Firebase database.
     public void createUser() {
         Log.d(TAG, "createUser() called");
+        mAuthViewModel.logout();
         try {
             final String username = mUsernameET.getText().toString();
             String userEmail = mUserEmailET.getText().toString();

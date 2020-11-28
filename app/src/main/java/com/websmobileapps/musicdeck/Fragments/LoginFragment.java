@@ -88,6 +88,7 @@ public class LoginFragment extends Fragment {
 
     // Logs in the user through FirebaseAuth
     private void loginUser() {
+        mAuthViewModel.logout();
         Log.d(TAG, "loginUser() called");
         try {
             String email = mEmailET.getText().toString();

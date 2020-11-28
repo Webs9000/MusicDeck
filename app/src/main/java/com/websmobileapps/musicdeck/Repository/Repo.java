@@ -22,11 +22,18 @@ import de.umass.lastfm.Album;
 public class Repo {
 
     static Repo instance;
-    static DatabaseReference mReference = FirebaseDatabase.getInstance().getReference();
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
     private String currentDeckUID;
     private String currentDeckTitle;
     private String currentDeckCreator;
     private Album currentAlbum;
+
+    private Repo() {
+        mDatabase = FirebaseDatabase.getInstance();
+        mDatabase.setPersistenceEnabled(true);
+        mReference = mDatabase.getReference();
+    }
 
     public static Repo getInstance() {
 
@@ -48,11 +55,12 @@ public class Repo {
         return mReference.child("users").child(UID).child("decks");
     }
 
-    // Retrieve reference to a user
+    // Retrieve root reference for data fan out.  This is used to add and update decks.
     public DatabaseReference getRootRef() {
         return mReference;
     }
 
+    // Get reference to a user
     public DatabaseReference getUserRef(String uid) {
         return mReference.child("users").child(uid);
     }
@@ -72,40 +80,41 @@ public class Repo {
         mReference.child("users").child(uid).removeValue();
     }
 
-    // Add a new Deck
-
-    // Retrieve reference for a particular deck's Cards.  This case takes 3 methods.
+    // Retrieve reference for a particular deck's Cards.
     public DatabaseReference getCards(String deckUID) {
         return mReference.child("decks").child(deckUID).child("cards");
     }
 
+    // Cache information for a currently loaded deck to be passed to a view.  This is
+    // mostly used for creating a new deck.
     public void setCurrentDeck(String deckUID, String title, String creator) {
         currentDeckUID = deckUID;
         currentDeckTitle = title;
         currentDeckCreator = creator;
     }
 
+    // Retrieve UID for the currently loaded deck.  These
     public String getCurrentDeckUID() {
         return currentDeckUID;
     }
 
+    // Retrieve title for the currently loaded deck
     public String getCurrentDeckTitle() {
         return currentDeckTitle;
     }
 
+    // Retrieve creator for the currently loaded deck
     public String getCurrentDeckCreator() {
         return currentDeckCreator;
     }
 
+    // Cache an Album object to be loaded by the new card view.
     public void setAlbum(Album album) {
         currentAlbum = album;
     }
 
+    // Retrieve the currently loaded Album object.
     public Album getCurrentAlbum() {
         return currentAlbum;
     }
-
-
-
-    // Update a Deck
 }

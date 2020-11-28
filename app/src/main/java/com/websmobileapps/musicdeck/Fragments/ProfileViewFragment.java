@@ -96,7 +96,7 @@ public class ProfileViewFragment extends Fragment {
 
         FirebaseRecyclerOptions<Deck> options =
                 new FirebaseRecyclerOptions.Builder<Deck>()
-                        .setQuery(Repo.getInstance().getUserDecks(userUID), Deck.class)
+                        .setQuery(Repo.getInstance().getUserDecks(userUID).limitToFirst(10), Deck.class)
                         .build();
 
         FirebaseRecyclerAdapter<Deck, DeckViewHolder> firebaseRecyclerAdapter =
