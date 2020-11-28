@@ -105,13 +105,19 @@
         <action
             android:id="@+id/action_profileViewFragment_to_createDeckFragment"
             app:destination="@id/createDeckFragment" />
+        <action
+            android:id="@+id/action_profileViewFragment_to_deckEditPlaceholder"
+            app:destination="@id/deckEditPlaceholder" />
+        <action
+            android:id="@+id/action_profileViewFragment_to_deckViewFragment2"
+            app:destination="@id/deckViewFragment" />
     </fragment>
     <fragment android:id="@+id/deckEditPlaceholder" >
         <action
             android:id="@+id/action_deckEditPlaceholder_to_addCardFragment"
             app:destination="@id/addCardFragment" />
         <action
-            android:id="@+id/action_deckEditPlaceholder_to_deckViewFragment"
-            app:destination="@id/deckViewFragment" />
+            android:id="@+id/action_deckEditPlaceholder_to_submitCardFragment"
+            app:destination="@id/submitCardFragment" />
     </fragment>
 </navigation>

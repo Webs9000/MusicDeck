@@ -19,6 +19,8 @@ import java.util.Objects;
 
 import de.umass.lastfm.Album;
 
+/*  Singleton model class for handling Firebase Realtime Database references.
+ */
 public class Repo {
 
     static Repo instance;
