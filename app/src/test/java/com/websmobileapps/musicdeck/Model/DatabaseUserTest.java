@@ -4,9 +4,13 @@ import junit.framework.TestCase;
 
 public class DatabaseUserTest extends TestCase {
 
-    public void testSetUsername() {
+    DatabaseUser testUser = new DatabaseUser("testName");
+    public void testGetUsername() {
+        assertEquals("testName", testUser.getUsername());
     }
 
-    public void testGetUsername() {
+    public void testSetUsername() {
+        testUser.setUsername("testName1");
+        assertEquals("testName1", testUser.getUsername());
     }
 }
