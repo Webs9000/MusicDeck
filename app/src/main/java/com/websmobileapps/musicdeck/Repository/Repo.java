@@ -15,6 +15,8 @@ import com.websmobileapps.musicdeck.Model.DatabaseUser;
 import com.websmobileapps.musicdeck.Model.Deck;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import de.umass.lastfm.Album;
@@ -108,6 +110,14 @@ public class Repo {
     // Retrieve creator for the currently loaded deck
     public String getCurrentDeckCreator() {
         return currentDeckCreator;
+    }
+
+    // Deletes a deck from the DB using data fan out
+    public void deleteDeck(String userUID, String deckUID) {
+        Map<String, Object> delFan = new HashMap<>();
+        delFan.put("/decks/" + deckUID, null);
+        delFan.put("/users/" + userUID + "/decks/" + deckUID, null);
+        mReference.updateChildren(delFan);
     }
 
     // Cache an Album object to be loaded by the new card view.
