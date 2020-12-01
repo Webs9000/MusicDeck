@@ -15,6 +15,7 @@ import com.websmobileapps.musicdeck.Model.DatabaseUser;
 import com.websmobileapps.musicdeck.Model.Deck;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -32,6 +33,7 @@ public class Repo {
     private String currentDeckTitle;
     private String currentDeckCreator;
     private Album currentAlbum;
+    private Boolean isEditingCard;
 
     private Repo() {
         mDatabase = FirebaseDatabase.getInstance();
@@ -128,5 +130,22 @@ public class Repo {
     // Retrieve the currently loaded Album object.
     public Album getCurrentAlbum() {
         return currentAlbum;
+    }
+
+    // Get the LastFM API key
+    public String getLastFMKey() {
+        // Keep the key encoded and not plaintext for some obfuscation
+        final String encodedString = "ZDAxODk4YzY3NTM4OTlkZjQ4NzhjZTMxYmYxYTRhZjE=";
+        byte[] decodedBytes = Base64.getDecoder().decode(encodedString);
+        return new String(decodedBytes);
+    }
+
+    // Getters and setters for knowing if the user is editing a card
+    // (as opposed to adding a new one)
+    public void setIsEditingCard(Boolean b) {
+        isEditingCard = b;
+    }
+    public Boolean isEditingCard() {
+        return isEditingCard;
     }
 }

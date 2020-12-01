@@ -5,10 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -24,14 +26,18 @@ import com.websmobileapps.musicdeck.R;
 import com.websmobileapps.musicdeck.Repository.Repo;
 import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import de.umass.lastfm.Album;
 import de.umass.lastfm.ImageSize;
+import de.umass.lastfm.Track;
 
 public class SubmitCardFragment extends Fragment {
 
@@ -51,6 +57,7 @@ public class SubmitCardFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+
     }
 
     private void attachToXML() {
@@ -63,7 +70,41 @@ public class SubmitCardFragment extends Fragment {
             // The list rank
             listRankInput = mSubmitCardFragment.findViewById(R.id.listRankNum);
 
+            // Get the repo
+            Repo r = Repo.getInstance();
+            // Determine if we need to get the album from LastFM again
+            if(r.isEditingCard()) {
+                // We need to make a new request
+                // The key
+                final String API_Key = r.getLastFMKey();
+                // Make the request based on the name and artist of the album
+                // TODO: How to get the album details, the repo?
+                String searchTerm = " ";
+                Collection<Album> results = Album.search(searchTerm, API_Key);
+                // Grab the first result
+                Album result = results.iterator().next();
+                // Update the repo
+                r.setAlbum(result);
+            }
+
+            // Populate the spinner
+            List<String> spinnerArray =  new ArrayList<String>();
+            // Get the album
+            final Album a = r.getCurrentAlbum();
+            // Get ready to populate the spinner
+            Collection<Track> tracks = a.getTracks();
+            for (Track track : tracks) {
+                spinnerArray.add(track.toString());
+            }
+            // Get an adapter for the spinner
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    getActivity(), android.R.layout.simple_spinner_item, spinnerArray);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Attach to the spinner
+            mySpinner.setAdapter(adapter);
+
             mSubmitButton = mSubmitCardFragment.findViewById(R.id.submitButton);
+            // Wait for the submit button to be clicked
             mSubmitButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -81,17 +122,16 @@ public class SubmitCardFragment extends Fragment {
                             return;
                         }
 
-                        // Instantiate the Repo
+                        // Get the repo
                         Repo r = Repo.getInstance();
                         // Grab the current deck from the repo
                         final String deckUID = r.getCurrentDeckUID();
                         // Grab the user ID
                         final String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
-                        // Grab all the album details
-                        Album a = r.getCurrentAlbum();
                         final String name = a.getName();
                         final String artist = a.getArtist();
                         final String albumArt = a.getImageURL(ImageSize.SMALL);
+
                         // Get the fav track selection from the user
                         String favTrack = "";
                         if (mySpinner.getSelectedItem() != null) {
@@ -125,8 +165,8 @@ public class SubmitCardFragment extends Fragment {
                                     }
                                 });
 
-                        // Navigate back to deck edit
-
+                        // TODO: Check this works
+                        Navigation.findNavController(requireView()).navigate(R.id.action_submitCardFragment_to_deckEditPlaceholder);
 
                     }
                 }

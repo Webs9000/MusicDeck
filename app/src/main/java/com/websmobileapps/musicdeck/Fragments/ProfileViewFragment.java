@@ -111,8 +111,7 @@ public class ProfileViewFragment extends Fragment {
                                 String key = getRef(position).getKey();
                                 Repo.getInstance().setCurrentDeck(key, model.getTitle(), model.getCreator());
 
-                                // Nav to deck edit
-                                //Navigation.findNavController(requireView()).navigate(R.id.);
+                                Navigation.findNavController(requireView()).navigate(R.id.action_profileViewFragment_to_deckEditFragment);
                             }
                         });
 

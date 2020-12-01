@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,25 +19,27 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.DatabaseReference;
 import com.websmobileapps.musicdeck.Model.Card;
 import com.websmobileapps.musicdeck.RecyclerViewHolders.CardViewHolder;
 import com.websmobileapps.musicdeck.R;
 import com.websmobileapps.musicdeck.Repository.Repo;
+import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 
 /**
  * Fragment for viewing the Cards in a Deck in a recycler view.
  */
-public class DeckViewFragment extends Fragment {
+public class EditDeckFragment extends Fragment {
 
     private RecyclerView mRecyclerView;
-    private View mDeckView;
+    private View mDeckEdit;
     private Repo mRepo;
     private TextView mTitleTV, mCreatorTV;
     private ImageButton mShareIB;
-    private Button mEditButton;
     private Button mAddCardButton;
+    private Button mDeleteDeckButton;
 
-    public DeckViewFragment() {
+    public EditDeckFragment() {
         // Required empty public constructor
     }
 
@@ -48,9 +51,9 @@ public class DeckViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        mDeckView = inflater.inflate(R.layout.fragment_deck_view, container, false);
+        mDeckEdit = inflater.inflate(R.layout.fragment_deck_edit, container, false);
 
-        return mDeckView;
+        return mDeckEdit;
     }
 
     @Override
@@ -58,7 +61,7 @@ public class DeckViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mRepo = Repo.getInstance();
 
-        mShareIB = mDeckView.findViewById(R.id.share_button);
+        mShareIB = mDeckEdit.findViewById(R.id.share_button);
         mShareIB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,13 +69,13 @@ public class DeckViewFragment extends Fragment {
             }
         });
 
-        mTitleTV = mDeckView.findViewById(R.id.deck_view_title_TV);
-        mCreatorTV = mDeckView.findViewById(R.id.deck_view_creator_TV);
+        mTitleTV = mDeckEdit.findViewById(R.id.deck_view_title_TV);
+        mCreatorTV = mDeckEdit.findViewById(R.id.deck_view_creator_TV);
 
         mTitleTV.setText(mRepo.getCurrentDeckTitle());
         mCreatorTV.setText(mRepo.getCurrentDeckCreator());
 
-        mRecyclerView = mDeckView.findViewById(R.id.deck_view_recycler);
+        mRecyclerView = mDeckEdit.findViewById(R.id.deck_view_recycler);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -105,6 +108,39 @@ public class DeckViewFragment extends Fragment {
 
         firebaseRecyclerAdapter.startListening();
         mRecyclerView.setAdapter(firebaseRecyclerAdapter);
+
+        /*
+        The bottom two buttons
+         */
+        // Add card
+        mAddCardButton = mDeckEdit.findViewById(R.id.AddCardButton);
+        mAddCardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Set the repo to know we are adding a card, not editing
+                mRepo.setIsEditingCard(Boolean.TRUE);
+                // Go to the add card fragment
+                Navigation.findNavController(requireView()).navigate(R.id.action_deckEditPlaceholder_to_addCardFragment);
+            }
+        });
+
+        // The delete deck button
+        mDeleteDeckButton = mDeckEdit.findViewById(R.id.DeleteDeckButton);
+        mDeleteDeckButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Delete the deck from the database
+                // TODO: Verify this is correct
+                AuthViewModel mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+                mAuthViewModel.init();
+                String UserID = mAuthViewModel.getUserMutableLiveData().getValue().getUid();
+                mRepo.deleteDeck(UserID ,mRepo.getCurrentDeckUID());
+
+                // Navigate back home
+                // TODO: Edit the nav graph to make this possible
+                // Navigation.findNavController(requireView()).navigate(R.id.);
+            }
+        });
 
     }
 }
