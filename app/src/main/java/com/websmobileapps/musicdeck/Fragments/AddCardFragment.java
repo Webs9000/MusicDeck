@@ -45,7 +45,8 @@ public class AddCardFragment extends Fragment {
             // Get the repo ready
             final Repo r = Repo.getInstance();
             // The key
-            final String API_Key = r.getLastFMKey();
+            //final String API_Key = r.getLastFMKey();
+            final String API_Key = "d01898c6753899df4878ce31bf1a4af1";
             // Wait for a button click
             mSearchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -53,7 +54,7 @@ public class AddCardFragment extends Fragment {
                     // The search term from the text box
                     final String searchTerm = mAlbumSearchTerm.getText().toString();
                     // Set up the request
-                    Caller.getInstance().setUserAgent("Music Deck");
+                    //Caller.getInstance().setUserAgent("Music Deck");
                     // Make the request
                     Collection<Album> results = Album.search(searchTerm, API_Key);
 
