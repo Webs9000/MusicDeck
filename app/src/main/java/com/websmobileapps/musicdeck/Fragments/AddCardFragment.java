@@ -24,7 +24,6 @@ public class AddCardFragment extends Fragment {
     private static final String TAG = "AddCardFragment";
     View mAddCardFragment;
     private EditText mAlbumSearchTerm;
-    private AuthViewModel mAuthViewModel;
     private Button mSearchButton;
 
     public AddCardFragment() {
@@ -57,18 +56,6 @@ public class AddCardFragment extends Fragment {
                     Caller.getInstance().setUserAgent("Music Deck");
                     // Make the request
                     Collection<Album> results = Album.search(searchTerm, API_Key);
-
-                    /*
-                    // Go through all our results and add them to the page
-                    for(Album result : results) {
-                        // Grab the bits of interest
-                        String name = result.getName();
-                        String artist = result.getArtist();
-                        Collection<Track> tracks = result.getTracks();
-                        // Fill the recycler view
-
-                    }
-                   */
 
                     // Simply return the first result
                     try {

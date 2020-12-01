@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#B5E1F7"
@@ -23,7 +24,7 @@
                 android:text="1"
                 android:textSize="50sp"
                 android:textColor="@android:color/white"
-                android:id="@+id/card_item_rank_TV"
+                android:id="@+id/card_edit_item_rank_TV"
                 android:gravity="center"
                 />
 
@@ -49,7 +50,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="italic"
-                    android:id="@+id/card_item_title_TV"
+                    android:id="@+id/card_edit_item_title_TV"
                     />
 
                 <TextView
@@ -59,7 +60,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="15sp"
                     android:textStyle="italic"
-                    android:id="@+id/card_item_artist_TV"
+                    android:id="@+id/card_edit_item_artist_TV"
                     />
 
                 <TextView
@@ -69,69 +70,36 @@
                     android:textColor="@android:color/white"
                     android:textSize="15sp"
                     android:textStyle="italic"
-                    android:id="@+id/card_item_pub_TV"
+                    android:id="@+id/card_edit_item_pub_TV"
                     />
 
             </LinearLayout>
 
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/favorite_track"
-            android:textColor="@android:color/white"
-            android:textSize="30sp"
-            android:paddingTop="5dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingBottom="5dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="&quot;Eat It&quot;"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:id="@+id/card_item_fav_TV"
-            />
-
-        <RatingBar
-            style = "?android:attr/ratingBarStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/card_item_rate_bar"
-            android:layout_gravity="center"
-            android:isIndicator="true"
-            android:rating="3"
-            android:progressTint="#FFDF00"
-            android:progressBackgroundTint="#CFB53B"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            />
-
 
 
         <LinearLayout
             android:id="@+id/ButtonsLayout"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true">
+            android:layout_width="match_parent">
+
             <Button
                 android:id="@+id/EditCardButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1" android:text="Edit">
-            </Button>
+                android:layout_weight="1"
+                android:text="@string/edit"
+                tools:ignore="ButtonStyle" />
+
             <Button
                 android:id="@+id/DeleteCardButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Delete">
-            </Button>
+                android:text="@string/delete"
+                tools:ignore="ButtonStyle" />
+
         </LinearLayout>
 
 

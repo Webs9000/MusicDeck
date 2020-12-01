@@ -72,7 +72,7 @@ public class DeckViewFragment extends Fragment {
         mTitleTV.setText(mRepo.getCurrentDeckTitle());
         mCreatorTV.setText(mRepo.getCurrentDeckCreator());
 
-        mRecyclerView = mDeckView.findViewById(R.id.deck_view_recycler);
+        mRecyclerView = mDeckView.findViewById(R.id.deck_edit_recycler);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 

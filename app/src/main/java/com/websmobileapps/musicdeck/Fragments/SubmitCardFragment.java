@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.websmobileapps.musicdeck.Model.Card;
 import com.websmobileapps.musicdeck.R;
@@ -27,7 +26,6 @@ import com.websmobileapps.musicdeck.Repository.Repo;
 import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -45,8 +43,8 @@ public class SubmitCardFragment extends Fragment {
     private Spinner mySpinner;
     private RatingBar mRatingBar;
     private Button mSubmitButton;
-    private EditText listRankInput;
-    View mSubmitCardFragment;
+    private EditText mListRankInput;
+    private View mSubmitCardFragment;
 
     public SubmitCardFragment() {
         // Required empty public constructor
@@ -57,7 +55,16 @@ public class SubmitCardFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mAuthViewModel = new ViewModelProvider(requireActivity()).get(AuthViewModel.class);
+        mAuthViewModel.init();
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        mSubmitCardFragment = inflater.inflate(R.layout.fragment_add_card, container, false);
+        attachToXML();
+        return mSubmitCardFragment;
     }
 
     private void attachToXML() {
@@ -68,29 +75,28 @@ public class SubmitCardFragment extends Fragment {
             // The star selector
             mRatingBar = mSubmitCardFragment.findViewById(R.id.ratingBar);
             // The list rank
-            listRankInput = mSubmitCardFragment.findViewById(R.id.listRankNum);
+            mListRankInput = mSubmitCardFragment.findViewById(R.id.listRankNum);
 
             // Get the repo
             Repo r = Repo.getInstance();
             // Determine if we need to get the album from LastFM again
+            final Album a;
             if(r.isEditingCard()) {
                 // We need to make a new request
                 // The key
                 final String API_Key = r.getLastFMKey();
                 // Make the request based on the name and artist of the album
-                // TODO: How to get the album details, the repo?
-                String searchTerm = " ";
+                String searchTerm = r.getCurrentCardTitle();
                 Collection<Album> results = Album.search(searchTerm, API_Key);
                 // Grab the first result
-                Album result = results.iterator().next();
+                a = results.iterator().next();
                 // Update the repo
-                r.setAlbum(result);
+            } else {
+                a = r.getCurrentAlbum();
             }
 
             // Populate the spinner
             List<String> spinnerArray =  new ArrayList<String>();
-            // Get the album
-            final Album a = r.getCurrentAlbum();
             // Get ready to populate the spinner
             Collection<Track> tracks = a.getTracks();
             for (Track track : tracks) {
@@ -109,7 +115,7 @@ public class SubmitCardFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     // The place to put it in the list
-                    String rank = listRankInput.getText().toString();
+                    String rank = mListRankInput.getText().toString();
 
                     if (rank.isEmpty()) {
                         Toast.makeText(getContext(), "Please enter a list rank.", Toast.LENGTH_SHORT).show();
@@ -166,7 +172,7 @@ public class SubmitCardFragment extends Fragment {
                                 });
 
                         // TODO: Check this works
-                        Navigation.findNavController(requireView()).navigate(R.id.action_submitCardFragment_to_deckEditPlaceholder);
+                        Navigation.findNavController(requireView()).navigate(R.id.action_submitCardFragment_to_deckEditFragment);
 
                     }
                 }

@@ -10,7 +10,7 @@ import com.websmobileapps.musicdeck.R;
 
 public class DeckViewHolder extends RecyclerView.ViewHolder {
 
-    TextView titleTV, creatorTV;
+    public TextView titleTV, creatorTV;
 
     public DeckViewHolder(@NonNull View itemView) {
         super(itemView);

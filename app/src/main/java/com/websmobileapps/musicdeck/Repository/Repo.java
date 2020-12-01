@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.websmobileapps.musicdeck.Model.Card;
 import com.websmobileapps.musicdeck.Model.DatabaseUser;
 import com.websmobileapps.musicdeck.Model.Deck;
 
@@ -27,11 +28,12 @@ import de.umass.lastfm.Album;
 public class Repo {
 
     static Repo instance;
-    private FirebaseDatabase mDatabase;
-    private DatabaseReference mReference;
+    private static FirebaseDatabase mDatabase;
+    private static DatabaseReference mReference;
     private String currentDeckUID;
     private String currentDeckTitle;
     private String currentDeckCreator;
+    private String currentCardTitle;
     private Album currentAlbum;
     private Boolean isEditingCard;
 
@@ -114,11 +116,33 @@ public class Repo {
         return currentDeckCreator;
     }
 
-    // Deletes a deck from the DB using data fan out
-    public void deleteDeck(String userUID, String deckUID) {
+    // Deletes the current deck from the DB using data fan out
+    public void deleteCurrentDeck(String userUID) {
         Map<String, Object> delFan = new HashMap<>();
-        delFan.put("/decks/" + deckUID, null);
-        delFan.put("/users/" + userUID + "/decks/" + deckUID, null);
+        delFan.put("/decks/" + currentDeckUID, null);
+        delFan.put("/users/" + userUID + "/decks/" + currentDeckUID, null);
+        mReference.updateChildren(delFan);
+
+        currentDeckUID = null;
+        currentDeckTitle = null;
+        currentDeckCreator = null;
+    }
+
+    // load a card to be passed to a view
+    public void setCurrentCardTitle(String cardTitle) {
+        currentCardTitle = cardTitle;
+    }
+
+    // Retrieve the current card
+    public String getCurrentCardTitle() {
+        return currentCardTitle;
+    }
+
+    // Deletes a Card from a Deck using data fan out
+    public void deleteCard(String userUID, String cardUID) {
+        Map<String, Object> delFan = new HashMap<>();
+        delFan.put("/decks/" + currentDeckUID + "/cards/" + cardUID, null);
+        delFan.put("/users/" + userUID + "/decks/" + currentDeckUID + "/cards/" + cardUID, null);
         mReference.updateChildren(delFan);
     }
 
@@ -145,6 +169,7 @@ public class Repo {
     public void setIsEditingCard(Boolean b) {
         isEditingCard = b;
     }
+
     public Boolean isEditingCard() {
         return isEditingCard;
     }

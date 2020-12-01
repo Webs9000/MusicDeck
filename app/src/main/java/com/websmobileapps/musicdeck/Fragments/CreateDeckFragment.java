@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -101,7 +101,7 @@ public class CreateDeckFragment extends Fragment {
 
                             mRepo.setCurrentDeck(uid, title, username);
 
-                            // Navigate to deck edit view
+                            Navigation.findNavController(requireView()).navigate(R.id.action_createDeckFragment_to_addCardFragment);
                         }
 
                         @Override
