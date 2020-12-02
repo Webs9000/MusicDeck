@@ -35,7 +35,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
         try {
             Glide.with(itemView)
                     .load(Uri.parse(artURL))
-                    .placeholder(R.drawable.no_image_available)
+                    .placeholder(R.drawable.smaller_eat_it)
                     .into(albumArtIV);
         } catch (Exception e) {
             // Nothing to do here

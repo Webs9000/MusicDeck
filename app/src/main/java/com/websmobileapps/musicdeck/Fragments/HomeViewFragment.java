@@ -56,7 +56,7 @@ public class HomeViewFragment extends Fragment {
 
         FirebaseRecyclerOptions<Deck> options =
                 new FirebaseRecyclerOptions.Builder<Deck>()
-                .setQuery(Repo.getInstance().getDecksRef().limitToFirst(10), Deck.class)
+                .setQuery(Repo.getInstance().getDecksRef(), Deck.class)
                 .build();
 
         FirebaseRecyclerAdapter<Deck, DeckViewHolder> firebaseRecyclerAdapter =

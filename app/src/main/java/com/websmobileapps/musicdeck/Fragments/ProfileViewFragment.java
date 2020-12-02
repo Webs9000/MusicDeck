@@ -96,7 +96,7 @@ public class ProfileViewFragment extends Fragment {
 
         FirebaseRecyclerOptions<Deck> options =
                 new FirebaseRecyclerOptions.Builder<Deck>()
-                        .setQuery(Repo.getInstance().getUserDecks(userUID).limitToFirst(10), Deck.class)
+                        .setQuery(Repo.getInstance().getUserDecks(userUID), Deck.class)
                         .build();
 
         FirebaseRecyclerAdapter<Deck, DeckViewHolder> firebaseRecyclerAdapter =
@@ -111,7 +111,7 @@ public class ProfileViewFragment extends Fragment {
                                 String key = getRef(position).getKey();
                                 Repo.getInstance().setCurrentDeck(key, model.getTitle(), model.getCreator());
 
-                                Navigation.findNavController(requireView()).navigate(R.id.action_profileViewFragment_to_deckEditFragment);
+                                Navigation.findNavController(requireView()).navigate(R.id.action_profileViewFragment_to_editDeckFragment);
                             }
                         });
 

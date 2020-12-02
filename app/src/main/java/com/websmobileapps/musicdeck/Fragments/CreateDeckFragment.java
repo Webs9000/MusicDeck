@@ -101,7 +101,7 @@ public class CreateDeckFragment extends Fragment {
 
                             mRepo.setCurrentDeck(uid, title, username);
 
-                            Navigation.findNavController(requireView()).navigate(R.id.action_createDeckFragment_to_addCardFragment);
+                            Navigation.findNavController(requireView()).navigate(R.id.action_createDeckFragment_to_editDeckFragment);
                         }
 
                         @Override

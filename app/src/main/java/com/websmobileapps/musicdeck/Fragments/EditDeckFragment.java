@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -34,6 +35,7 @@ public class EditDeckFragment extends Fragment {
     private View mDeckEdit;
     private Repo mRepo;
     private Button mShareIB, mAddCardButton, mDeleteDeckButton;
+    private TextView mTitleTV;
 
     AuthViewModel mAuthViewModel;
 
@@ -62,13 +64,16 @@ public class EditDeckFragment extends Fragment {
 
         mRepo = Repo.getInstance();
 
-        mShareIB = mDeckEdit.findViewById(R.id.share_button);
+        mShareIB = mDeckEdit.findViewById(R.id.edit_share_button);
         mShareIB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Navigation.findNavController(requireView()).navigate(R.id.action_deckEditFragment_to_qrCodeDisplayFragment);
+                Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_qrCodeDisplayFragment);
             }
         });
+
+        mTitleTV = mDeckEdit.findViewById(R.id.deck_edit_title_TV);
+        mTitleTV.setText(mRepo.getCurrentDeckTitle());
 
         mRecyclerView = mDeckEdit.findViewById(R.id.deck_edit_recycler);
         mRecyclerView.setHasFixedSize(true);
@@ -78,7 +83,7 @@ public class EditDeckFragment extends Fragment {
 
         FirebaseRecyclerOptions<Card> options =
                 new FirebaseRecyclerOptions.Builder<Card>()
-                        .setQuery(mRepo.getCards(deckUID).orderByChild("listRank"), Card.class)
+                        .setQuery(Repo.getInstance().getCards(deckUID).orderByChild("listRank"), Card.class)
                         .build();
 
         FirebaseRecyclerAdapter<Card, CardEditViewHolder> firebaseRecyclerAdapter =
@@ -88,25 +93,26 @@ public class EditDeckFragment extends Fragment {
 
                         holder.setItem(model.getTitle(), model.getArtist(), model.getListRank(), model.getPublicationDate());
 
-                        Button editCardButton = holder.itemView.findViewById(R.id.EditCardButton);
+                        Button editCardButton = holder.itemView.findViewById(R.id.editCardButton);
                         editCardButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 // Set the repo to know we are editing a card, not adding
-                                mRepo.setIsEditingCard(Boolean.TRUE);
-                                mRepo.setCurrentCardTitle(model.getTitle());
+                                Repo repo = Repo.getInstance();
+                                repo.setIsEditingCard(Boolean.TRUE);
+                                repo.setCurrentCardTitle(model.getTitle());
 
-                                Navigation.findNavController(requireView()).navigate(R.id.action_deckEditFragment_to_submitCardFragment);
+                                Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_submitCardFragment);
                             }
                         });
 
-                        Button deleteCardButton = holder.itemView.findViewById(R.id.DeleteCardButton);
+                        Button deleteCardButton = holder.itemView.findViewById(R.id.deleteCardButton);
                         deleteCardButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
                                 String cardUID = getRef(position).getKey();
-                                mRepo.deleteCard(userUID, cardUID);
+                                Repo.getInstance().deleteCard(userUID, cardUID);
                             }
                         });
                     }
@@ -129,17 +135,17 @@ public class EditDeckFragment extends Fragment {
         The bottom two buttons
          */
         // Add card
-        mAddCardButton = mDeckEdit.findViewById(R.id.AddCardButton);
+        mAddCardButton = mDeckEdit.findViewById(R.id.addCardButton);
         mAddCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Go to the add card fragment
-                Navigation.findNavController(requireView()).navigate(R.id.action_deckEditFragment_to_addCardFragment);
+                Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_addCardFragment);
             }
         });
 
         // The delete deck button
-        mDeleteDeckButton = mDeckEdit.findViewById(R.id.DeleteDeckButton);
+        mDeleteDeckButton = mDeckEdit.findViewById(R.id.deleteDeckButton);
         mDeleteDeckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -147,7 +153,7 @@ public class EditDeckFragment extends Fragment {
                 String UserID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
                 mRepo.deleteCurrentDeck(UserID);
 
-                Navigation.findNavController(requireView()).navigate(R.id.action_deckEditFragment_to_homeViewFragment);
+                Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_homeViewFragment);
             }
         });
 

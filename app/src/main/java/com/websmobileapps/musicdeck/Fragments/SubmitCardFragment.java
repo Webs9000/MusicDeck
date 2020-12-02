@@ -172,7 +172,7 @@ public class SubmitCardFragment extends Fragment {
                                 });
 
                         // TODO: Check this works
-                        Navigation.findNavController(requireView()).navigate(R.id.action_submitCardFragment_to_deckEditFragment);
+                        Navigation.findNavController(requireView()).navigate(R.id.action_submitCardFragment_to_editDeckFragment);
 
                     }
                 }

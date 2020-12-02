@@ -85,7 +85,7 @@
             android:layout_width="match_parent">
 
             <Button
-                android:id="@+id/EditCardButton"
+                android:id="@+id/editCardButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -93,7 +93,7 @@
                 tools:ignore="ButtonStyle" />
 
             <Button
-                android:id="@+id/DeleteCardButton"
+                android:id="@+id/deleteCardButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

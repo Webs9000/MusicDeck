@@ -52,4 +52,7 @@
     <string name="home">Home</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="delete_deck">Delete Deck</string>
+    <string name="add_card">Add Card</string>
+    <string name="deck_title">Deck title</string>
 </resources>

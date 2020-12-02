@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#B5E1F7"
+    android:layout_marginBottom="10dp"
     >
 
     <LinearLayout
@@ -15,7 +16,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/no_image_available"
+            android:src="@drawable/smaller_eat_it"
             android:layout_gravity="center"
             android:contentDescription="@string/album_art"
             android:paddingTop="10dp"
@@ -29,7 +30,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="75dp"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:text="1"
                 android:textSize="50sp"
@@ -58,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:text="EAT IT"
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="italic"
                     android:id="@+id/card_item_title_TV"
                     />
@@ -68,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:text="Wierd Al Yankovic"
                     android:textColor="@android:color/white"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:textStyle="italic"
                     android:id="@+id/card_item_artist_TV"
                     />
@@ -78,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:text="February 28, 1984"
                     android:textColor="@android:color/white"
-                    android:textSize="15sp"
+                    android:textSize="12sp"
                     android:textStyle="italic"
                     android:id="@+id/card_item_pub_TV"
                     />

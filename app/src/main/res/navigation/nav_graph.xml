@@ -57,8 +57,8 @@
         android:name="com.websmobileapps.musicdeck.Fragments.CreateDeckFragment"
         android:label="CreateDeckFragment" >
         <action
-            android:id="@+id/action_createDeckFragment_to_addCardFragment"
-            app:destination="@id/addCardFragment" />
+            android:id="@+id/action_createDeckFragment_to_editDeckFragment"
+            app:destination="@id/editDeckFragment" />
     </fragment>
     <fragment
         android:id="@+id/deckViewFragment"
@@ -95,8 +95,8 @@
         android:label="fragment_submit_card"
         tools:layout="@layout/fragment_submit_card" >
         <action
-            android:id="@+id/action_submitCardFragment_to_deckEditFragment"
-            app:destination="@id/deckEditFragment" />
+            android:id="@+id/action_submitCardFragment_to_editDeckFragment"
+            app:destination="@id/editDeckFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileViewFragment"
@@ -106,24 +106,24 @@
             android:id="@+id/action_profileViewFragment_to_createDeckFragment"
             app:destination="@id/createDeckFragment" />
         <action
-            android:id="@+id/action_profileViewFragment_to_deckEditFragment"
-            app:destination="@id/deckEditFragment" />
-        <action
-            android:id="@+id/action_profileViewFragment_to_deckViewFragment2"
-            app:destination="@id/deckViewFragment" />
+            android:id="@+id/action_profileViewFragment_to_editDeckFragment"
+            app:destination="@id/editDeckFragment" />
     </fragment>
-    <fragment android:id="@+id/deckEditFragment" >
+    <fragment
+        android:id="@+id/editDeckFragment"
+        android:name="com.websmobileapps.musicdeck.Fragments.EditDeckFragment"
+        android:label="EditDeckFragment" >
         <action
-            android:id="@+id/action_deckEditFragment_to_submitCardFragment"
-            app:destination="@id/submitCardFragment" />
+            android:id="@+id/action_editDeckFragment_to_homeViewFragment"
+            app:destination="@id/homeViewFragment" />
         <action
-            android:id="@+id/action_deckEditFragment_to_qrCodeDisplayFragment"
+            android:id="@+id/action_editDeckFragment_to_qrCodeDisplayFragment"
             app:destination="@id/qrCodeDisplayFragment" />
         <action
-            android:id="@+id/action_deckEditFragment_to_addCardFragment"
+            android:id="@+id/action_editDeckFragment_to_addCardFragment"
             app:destination="@id/addCardFragment" />
         <action
-            android:id="@+id/action_deckEditFragment_to_homeViewFragment"
-            app:destination="@id/homeViewFragment" />
+            android:id="@+id/action_editDeckFragment_to_submitCardFragment"
+            app:destination="@id/submitCardFragment" />
     </fragment>
 </navigation>

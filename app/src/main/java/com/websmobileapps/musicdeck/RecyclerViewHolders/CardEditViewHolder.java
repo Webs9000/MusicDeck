@@ -18,10 +18,10 @@ public class CardEditViewHolder extends RecyclerView.ViewHolder {
 
     public void setItem(String title, String artist, int listRank, String publicationDate) {
 
-        rankTV = itemView.findViewById(R.id.card_item_rank_TV);
-        titleTV = itemView.findViewById(R.id.card_item_title_TV);
-        artistTV = itemView.findViewById(R.id.card_item_artist_TV);
-        pubTV = itemView.findViewById(R.id.card_item_pub_TV);
+        rankTV = itemView.findViewById(R.id.card_edit_item_rank_TV);
+        titleTV = itemView.findViewById(R.id.card_edit_item_title_TV);
+        artistTV = itemView.findViewById(R.id.card_edit_item_artist_TV);
+        pubTV = itemView.findViewById(R.id.card_edit_item_pub_TV);
 
         String rank = "" + listRank;
         rankTV.setText(rank);
