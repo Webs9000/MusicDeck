@@ -27,7 +27,7 @@ import com.websmobileapps.musicdeck.ViewModels.AuthViewModel;
 import java.util.Objects;
 
 /**
- * Fragment for viewing the Cards in a Deck in a recycler view.
+ * Fragment for viewing and editing the Cards in a Deck owned byt he current user in a recycler view.
  */
 public class EditDeckFragment extends Fragment {
 
@@ -72,69 +72,10 @@ public class EditDeckFragment extends Fragment {
             }
         });
 
-        mTitleTV = mDeckEdit.findViewById(R.id.deck_edit_title_TV);
-        mTitleTV.setText(mRepo.getCurrentDeckTitle());
-
-        mRecyclerView = mDeckEdit.findViewById(R.id.deck_edit_recycler);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        String deckUID = mRepo.getCurrentDeckUID();
-
-        FirebaseRecyclerOptions<Card> options =
-                new FirebaseRecyclerOptions.Builder<Card>()
-                        .setQuery(Repo.getInstance().getCards(deckUID).orderByChild("listRank"), Card.class)
-                        .build();
-
-        FirebaseRecyclerAdapter<Card, CardEditViewHolder> firebaseRecyclerAdapter =
-                new FirebaseRecyclerAdapter<Card, CardEditViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull CardEditViewHolder holder, final int position, @NonNull final Card model) {
-
-                        holder.setItem(model.getTitle(), model.getArtist(), model.getListRank(), model.getPublicationDate());
-
-                        Button editCardButton = holder.itemView.findViewById(R.id.editCardButton);
-                        editCardButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // Set the repo to know we are editing a card, not adding
-                                Repo repo = Repo.getInstance();
-                                repo.setIsEditingCard(Boolean.TRUE);
-                                repo.setCurrentCardTitle(model.getTitle());
-
-                                Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_submitCardFragment);
-                            }
-                        });
-
-                        Button deleteCardButton = holder.itemView.findViewById(R.id.deleteCardButton);
-                        deleteCardButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
-                                String cardUID = getRef(position).getKey();
-                                Repo.getInstance().deleteCard(userUID, cardUID);
-                            }
-                        });
-                    }
-
-                    @NonNull
-                    @Override
-                    public CardEditViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-                        View view = LayoutInflater.from(parent.getContext())
-                                .inflate(R.layout.item_card_edit, parent, false);
-
-                        return new CardEditViewHolder(view);
-                    }
-                };
-
-        firebaseRecyclerAdapter.startListening();
-        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
-
         /*
-        The bottom two buttons
+        The top two buttons
          */
-        // Add card
+        // Add card button
         mAddCardButton = mDeckEdit.findViewById(R.id.addCardButton);
         mAddCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +97,64 @@ public class EditDeckFragment extends Fragment {
                 Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_homeViewFragment);
             }
         });
+
+        mTitleTV = mDeckEdit.findViewById(R.id.deck_edit_title_TV);
+        mTitleTV.setText(mRepo.getCurrentDeckTitle());
+
+        mRecyclerView = mDeckEdit.findViewById(R.id.deck_edit_recycler);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        String deckUID = mRepo.getCurrentDeckUID();
+
+        FirebaseRecyclerOptions<Card> options =
+                new FirebaseRecyclerOptions.Builder<Card>()
+                        .setQuery(mRepo.getCards(deckUID).orderByChild("listRank"), Card.class)
+                        .build();
+
+        FirebaseRecyclerAdapter<Card, CardEditViewHolder> firebaseRecyclerAdapter =
+                new FirebaseRecyclerAdapter<Card, CardEditViewHolder>(options) {
+                    @Override
+                    protected void onBindViewHolder(@NonNull CardEditViewHolder holder, final int position, @NonNull final Card model) {
+
+                        holder.setEditItem(model.getTitle(), model.getArtist(), model.getListRank(), model.getPublicationDate());
+
+                        Button editCardButton = holder.itemView.findViewById(R.id.editCardButton);
+                        editCardButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // Set the repo to know we are editing a card, not adding
+                                mRepo.setIsEditingCard(Boolean.TRUE);
+                                mRepo.setCurrentCardTitle(model.getTitle());
+
+                                Navigation.findNavController(requireView()).navigate(R.id.action_editDeckFragment_to_submitCardFragment);
+                            }
+                        });
+
+                        Button deleteCardButton = holder.itemView.findViewById(R.id.deleteCardButton);
+                        deleteCardButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                String userUID = Objects.requireNonNull(mAuthViewModel.getUserMutableLiveData().getValue()).getUid();
+                                String cardUID = getRef(position).getKey();
+                                mRepo.deleteCard(userUID, cardUID);
+                            }
+                        });
+                    }
+
+                    @NonNull
+                    @Override
+                    public CardEditViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+                        View view = LayoutInflater.from(parent.getContext())
+                                .inflate(R.layout.item_card_edit, parent, false);
+
+                        return new CardEditViewHolder(view);
+                    }
+                };
+
+        firebaseRecyclerAdapter.startListening();
+        mRecyclerView.setAdapter(firebaseRecyclerAdapter);
 
     }
 }

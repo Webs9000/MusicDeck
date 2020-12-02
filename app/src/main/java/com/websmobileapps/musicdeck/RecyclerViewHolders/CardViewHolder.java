@@ -38,7 +38,7 @@ public class CardViewHolder extends RecyclerView.ViewHolder {
                     .placeholder(R.drawable.smaller_eat_it)
                     .into(albumArtIV);
         } catch (Exception e) {
-            // Nothing to do here
+            // Nothing to do here, default image will show
         }
 
         String rank = "" + listRank;
